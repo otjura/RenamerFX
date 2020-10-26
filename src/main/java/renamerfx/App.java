@@ -247,10 +247,19 @@ public class App {
                 help();
             }
         }
-        else if (args.length != 3) {
+        else if (args.length == 3) {
+            try {
+                File[] dir = collectFilesRecursively(Paths.get(args[0]));
+                renameFiles(dir, args[1], args[2]);
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
             System.out.println("Supply all arguments for non-interactive batch renaming:");
             help();
         }
-        // TODO implement arg based renaming here
+
     }
 }
