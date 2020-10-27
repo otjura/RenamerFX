@@ -132,7 +132,11 @@ public class App {
 
         if (yes) {
             System.out.println("Renaming...");
-            renameFiles(files, replaceWhat, replaceTo);
+            ArrayList<String> renamed = renameFiles(files, replaceWhat, replaceTo);
+            for (String s : renamed) {
+                System.out.println(s);
+            }
+
             System.out.println("Done!");
         }
         else {
@@ -144,7 +148,8 @@ public class App {
     }
     
     /**
-    * Lists filenames of File objects in an array in a nice fashion.
+    * Prints type and full path filename of File objects in a provided File[] parameter.
+    * Printout is one entry per row.
     *
     * @param files File[] of length > 0
     */
@@ -195,9 +200,10 @@ public class App {
     * @param files array of File objects
     * @param replaceWhat String to replace in filenames. Assumes no empty String.
     * @param replaceTo String acting as an replacement. Can be empty for deletion.
+    * @return ArrayList containing string representations of succeeded renames before --> after style
     */
-    private static void renameFiles(File[] files, String replaceWhat, String replaceTo) {
-        ArrayList<File> problemFiles = new ArrayList<>();
+    private static ArrayList<String> renameFiles(File[] files, String replaceWhat, String replaceTo) {
+        ArrayList<String> renamedFiles = new ArrayList<>();
         for (File file : files) {
             if (file.canRead()) {
                 String filename = file.getName();
@@ -206,31 +212,30 @@ public class App {
                 String fullnewname = fullpath+newname;
                 boolean canDo = file.renameTo(new File(fullnewname)); // renames files in-place
                 if (canDo) {
-                    System.out.printf("%s --> %s\n", filename, newname);
+                    renamedFiles.add(filename+" --> "+newname);
                 }
             }
-            else {
-                System.out.println("Can't read "+file.getName());
-                problemFiles.add(file);
-            }
         }
-        if (!problemFiles.isEmpty()) {
-            System.out.println("Could not rename the following files:");
-            
-        }
+        return renamedFiles;
     }
     
     /**
      * Prints help message on console.
      */
     private static void help() {
-        System.out.printf("USAGE:\nrenamerfx <folder> <stringToReplace> <replacementString>\n\n%s for this help\n%s for interactive mode\n", HELP_OPTION, INTERACTIVE_OPTION);
+        System.out.printf(
+            "USAGE\n"+
+            "renamerfx <folder> <stringToReplace> <replacementString>\n\n"+
+            "%s for this help\n"+
+            "%s for interactive mode\n\n", HELP_OPTION, INTERACTIVE_OPTION
+        );
     }
 
     /**
      * Command-line version starting point.
+     * Provides both interactive and direct args ways of running the renamer.
      *
-     * @param args command line arguments described @help()
+     * @param args command line arguments described in help()
      */
     public static void main(String[] args) {
         if (args.length == 0) {
@@ -250,7 +255,11 @@ public class App {
         else if (args.length == 3) {
             try {
                 File[] dir = collectFilesRecursively(Paths.get(args[0]));
-                renameFiles(dir, args[1], args[2]);
+                ArrayList<String> renamedFiles = renameFiles(dir, args[1], args[2]);
+                for (String s : renamedFiles) {
+                    System.out.println(s);
+                }
+
             }
             catch (IOException e) {
                 e.printStackTrace();
