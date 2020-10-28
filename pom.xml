@@ -90,7 +90,7 @@
           <artifactId>javafx-maven-plugin</artifactId>
           <version>0.0.5</version>
           <configuration>
-            <mainClass>renamerfx.GUI</mainClass>
+            <mainClass>renamerfx.FXMLGuiStarter</mainClass>
           </configuration>
         </plugin>
       </plugins>
