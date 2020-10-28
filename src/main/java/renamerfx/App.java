@@ -254,14 +254,20 @@ public class App {
         }
         else if (args.length == 3) {
             try {
-                File[] dir = collectFilesRecursively(Paths.get(args[0]));
-                ArrayList<String> renamedFiles = renameFiles(dir, args[1], args[2]);
-                for (String s : renamedFiles) {
-                    System.out.println(s);
+                File dir = new File(args[0]);
+                if (dir.exists() && dir.isDirectory()) {
+                    File[] files = collectFilesRecursively(Paths.get(args[0]));
+                    ArrayList<String> renamedFiles = renameFiles(files, args[1], args[2]);
+                    for (String s : renamedFiles) {
+                        System.out.println(s);
+                    }
                 }
-
+                else {
+                    System.out.println("Error: directory not valid\n");
+                }
             }
             catch (IOException e) {
+                System.out.println("Something went wrong...");
                 e.printStackTrace();
             }
         }
