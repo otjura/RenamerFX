@@ -7,17 +7,21 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<GridPane fx:controller="renamerfx.Controller" xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10">
-  <padding>
-    <Insets top="25" right="25" bottom="10" left="25"/>
-  </padding>
-  <Text text="Welcome" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2"/>
-  <Label text="User Name:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-  <TextField GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-  <Label text="Password:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-  <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-  <HBox spacing="10" alignment="bottom_right" GridPane.columnIndex="1" GridPane.rowIndex="4">
-    <Button text="Sign In" onAction="#handleSubmitButtonAction"/>
+<GridPane fx:id="grid" fx:controller="renamerfx.Controller" xmlns:fx="http://javafx.com/fxml">
+
+  <Label text="Directory" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+  <TextField fx:id="dirField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+  <Label text="Replace what?" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+  <TextField fx:id="replaceWhatField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+  <Label text="Replace to?" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+  <TextField fx:id="replaceToField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+  
+  <HBox fx:id="hbox" GridPane.columnIndex="1" GridPane.rowIndex="4">
+    <Button text="Replace" onAction="#handleSubmitButtonAction"/>
   </HBox>
-  <Text fx:id="actiontarget" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+
+  <Text fx:id="actiontarget" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
 </GridPane>

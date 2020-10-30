@@ -11,11 +11,11 @@ public class FXMLGuiStarter extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        // tl;dr it's a Maven thing https://stackoverflow.com/questions/20507591/javafx-location-is-required-even-though-it-is-in-the-same-package 
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("GUI.fxml"));
-        Scene scene = new Scene(root, 300, 275);
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("GUI.fxml")); // getClassLoader() or Maven won't run this properly
+        Scene scene = new Scene(root);  // can't be themed
+        scene.getStylesheets().add("style.css");
 
-        stage.setTitle("FXML Welcome");
+        stage.setTitle("RenamerFX");
         stage.setScene(scene);
         stage.show();
     }
