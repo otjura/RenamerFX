@@ -6,6 +6,9 @@ import javafx.scene.Scene;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
 
+/*
+ * GUI starter class
+ */
 public class FXMLGuiStarter extends Application {
 
     @Override

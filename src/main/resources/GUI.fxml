@@ -19,9 +19,9 @@
   <TextField fx:id="replaceToField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
   
   <HBox fx:id="hbox" GridPane.columnIndex="1" GridPane.rowIndex="4">
-    <Button text="Replace" onAction="#handleSubmitButtonAction"/>
+    <Button fx:id="actionButton" text="Replace" onAction="#renameFilesAction"/>
   </HBox>
 
-  <Text fx:id="actiontarget" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+  <Text fx:id="statusText" text="READY." GridPane.columnIndex="1" GridPane.rowIndex="5"/>
 
 </GridPane>
