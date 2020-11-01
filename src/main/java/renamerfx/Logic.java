@@ -1,3 +1,8 @@
+/*
+ * Copyright Otso Rajala <ojrajala@gmail.com>, 2020
+ * 
+ */
+
 package renamerfx;
 
 import java.util.ArrayList;

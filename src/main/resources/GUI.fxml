@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE xml>
 
+<!-- Copyright Otso Rajala <ojrajala@gmail.com>, 2020 -->
 <?import java.net.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
