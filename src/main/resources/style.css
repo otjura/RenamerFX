@@ -1,0 +1,24 @@
+#grid {
+    -fx-background-color: yellow;
+    -fx-alignment: center;
+    -fx-hgap: 10;
+    -fx-vgap: 10;
+    -fx-padding: 25 25 10 25;
+}
+
+.button {
+    -fx-background-color: pink;
+}
+
+.label {
+    -fx-background-color: lightblue;
+}
+
+.text-field {
+    -fx-background-color: lightgreen;
+}
+
+#hbox {
+    -fx-alignment: center;
+    -fx-padding: 10;
+}

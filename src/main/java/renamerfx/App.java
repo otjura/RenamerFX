@@ -8,14 +8,14 @@ package renamerfx;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
-import java.util.stream.Stream;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
+import static renamerfx.Logic.*;
 
-
+/*
+ * Exclusively command-line portion of the application.
+ */
 public class App {
     
     private static final String HELP_OPTION = "--help";
@@ -163,62 +163,8 @@ public class App {
                 e.printStackTrace();
             }
         }
-    }
-    
-    /**
-    * Recurses a given file tree, returning array of File objects upon success.
-    *
-    * @param startDirectory Path, assumes it's an existing valid directory
-    * @return File[] of indefinite length >= 1
-    * @throws IOException in case something goes wrong reading files
-    */
-    private static File[] collectFilesRecursively(Path startDirectory) throws IOException {
-        Stream<Path> fileStream = Files.walk(startDirectory);
-        ArrayList<File> files = new ArrayList<>();
-        // if try-catching below stream operation, the following nag happens:
-        // "Local variable files defined in an enclosing scope must be final or effectively final"
-        // ^^throwing simplifies code a lot here
-        fileStream.forEach(o -> {
-            File file = o.toFile();
-            if (file.isFile()) {
-                files.add(file); 
-            }
-        });
-        fileStream.close();
-        
-        // do this twoliner because ArrayList.toArray() returns Object so can't oneline File[] fileArray = files.toArray();
-        File[] fileArray = new File[files.size()];
-        fileArray = files.toArray(fileArray); // source.toArray(targetArray)
-
-        return fileArray;
-    }
-    
-    /**
-    * Renames File objects provided in an input array.
-    * Renaming is done in place, replacing the original file. This is default behaviour in common usual tools such as mv and ren.
-    *
-    * @param files array of File objects
-    * @param replaceWhat String to replace in filenames. Assumes no empty String.
-    * @param replaceTo String acting as an replacement. Can be empty for deletion.
-    * @return ArrayList containing string representations of succeeded renames before --> after style
-    */
-    private static ArrayList<String> renameFiles(File[] files, String replaceWhat, String replaceTo) {
-        ArrayList<String> renamedFiles = new ArrayList<>();
-        for (File file : files) {
-            if (file.canRead()) {
-                String filename = file.getName();
-                String newname = filename.replace(replaceWhat, replaceTo);
-                String fullpath = file.getParent()+"/"; // has absolute path so OS is agnostic about that folder separator
-                String fullnewname = fullpath+newname;
-                boolean canDo = file.renameTo(new File(fullnewname)); // renames files in-place
-                if (canDo) {
-                    renamedFiles.add(filename+" --> "+newname);
-                }
-            }
-        }
-        return renamedFiles;
-    }
-    
+    } 
+   
     /**
      * Prints help message on console.
      */

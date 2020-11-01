@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<GridPane fx:id="grid" fx:controller="renamerfx.Controller" xmlns:fx="http://javafx.com/fxml">
+
+  <Label text="Directory" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+  <TextField fx:id="dirField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+  <Label text="Replace what?" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+  <TextField fx:id="replaceWhatField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+  <Label text="Replace to?" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+  <TextField fx:id="replaceToField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+  
+  <HBox fx:id="hbox" GridPane.columnIndex="1" GridPane.rowIndex="4">
+    <Button fx:id="actionButton" text="Replace" onAction="#renameFilesAction"/>
+  </HBox>
+
+  <Text fx:id="statusText" text="READY." GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+</GridPane>

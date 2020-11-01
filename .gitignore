@@ -3,6 +3,8 @@
 **/.vscode
 **/.classpath
 **/.project
+**/.factorypath
 **/*.iml
 **/*.factorypath
 **/target
+
