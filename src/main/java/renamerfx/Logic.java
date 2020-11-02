@@ -64,9 +64,11 @@ final class Logic {
                 String newname = filename.replace(replaceWhat, replaceTo);
                 String fullpath = file.getParent()+"/"; // has absolute path so OS is agnostic about that folder separator
                 String fullnewname = fullpath+newname;
-                boolean canDo = file.renameTo(new File(fullnewname)); // renames files in-place
-                if (canDo) {
-                    renamedFiles.add(filename+" --> "+newname); // TODO BUG also adds files that were not changed
+                if (!filename.equals(newname)) {
+                    boolean canDo = file.renameTo(new File(fullnewname)); // renames files in-place
+                    if (canDo) {
+                        renamedFiles.add(filename+" --> "+newname);
+                    }
                 }
             }
         }
