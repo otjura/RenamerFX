@@ -54,7 +54,7 @@ final class Logic {
     * @param files array of File objects
     * @param replaceWhat String to replace in filenames. Assumes no empty String.
     * @param replaceTo String acting as an replacement. Can be empty for deletion.
-    * @return ArrayList containing string representations of succeeded renames before --> after style
+    * @return ArrayList containing string representations of succeeded renames
     */
     static ArrayList<String> renameFiles(File[] files, String replaceWhat, String replaceTo) {
         ArrayList<String> renamedFiles = new ArrayList<>();
@@ -66,7 +66,7 @@ final class Logic {
                 String fullnewname = fullpath+newname;
                 boolean canDo = file.renameTo(new File(fullnewname)); // renames files in-place
                 if (canDo) {
-                    renamedFiles.add(filename+" --> "+newname);
+                    renamedFiles.add(filename+" --> "+newname); // TODO BUG also adds files that were not changed
                 }
             }
         }
@@ -80,25 +80,24 @@ final class Logic {
      * @param dir String
      * @param replaceWhat String, has to have something in it
      * @param replaceTo String
+     * @return ArrayList containing string representations of succeeded renames
      */
-    static void renameRecursively(String dir, String replaceWhat, String replaceTo) {
+    static ArrayList<String> renameRecursively(String dir, String replaceWhat, String replaceTo) {
+        ArrayList<String> renamed = new ArrayList<>();
         if (!replaceWhat.isEmpty()) {
-            Path dirPath = null;
-            File[] files = null;
             try {
-                dirPath = Paths.get(dir);
+                Path dirPath = Paths.get(dir);
+                File[] files = collectFilesRecursively(dirPath);
+                renamed = renameFiles(files, replaceWhat, replaceTo);
             }
             catch (InvalidPathException e) {
                 e.printStackTrace();
-            }
-            try {
-                files = collectFilesRecursively(dirPath);
-                renameFiles(files, replaceWhat, replaceTo);
             }
             catch (IOException e) {
                 e.printStackTrace();
             }
         }
+        return renamed;
     }
 
     /**

@@ -46,8 +46,8 @@ public final class Controller {
         boolean valid = checkFolderValidity(dir);
 
         if (valid) {
-            renameRecursively(dir, what, to);
-            statusText.setText("Success!");
+            int filesRenamed = renameRecursively(dir, what, to).size();
+            statusText.setText("Success! Renamed "+filesRenamed+" files.");
         }
         else {
             statusText.setText("Invalid folder.");
