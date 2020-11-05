@@ -85,7 +85,7 @@ public class App {
         
         // Collect files recursively into array
 
-        File[] files = null;
+        File[] files = {};
 
         try {
             files = collectFilesRecursively(Paths.get(folderPath));
@@ -93,17 +93,11 @@ public class App {
         catch (IOException e) {
             e.printStackTrace();
         }
-        finally {
-            if (files == null) {
-                System.out.println("This wasn't supposed to happen..");
-                System.exit(-1);
-            }
-        }
         
         // Renaming sequence
 
-        String replaceWhat = null;
-        String replaceTo = null;
+        String replaceWhat = "";
+        String replaceTo = "";
 
         while (true) {
             System.out.print("Replace what in filenames?: ");
