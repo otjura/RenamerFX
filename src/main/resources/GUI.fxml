@@ -19,10 +19,10 @@
   <Label text="Replace to?" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
   <TextField fx:id="replaceToField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
   
-  <HBox fx:id="hbox" GridPane.columnIndex="1" GridPane.rowIndex="4">
+  <HBox fx:id="hbox" GridPane.rowIndex="3">
     <Button fx:id="actionButton" text="Replace" onAction="#renameFilesAction"/>
   </HBox>
 
-  <Text fx:id="statusText" text="READY." GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+  <Text fx:id="statusText" text="READY." GridPane.rowIndex="5"/>
 
 </GridPane>

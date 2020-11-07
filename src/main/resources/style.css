@@ -27,3 +27,9 @@
     -fx-alignment: center;
     -fx-padding: 10;
 }
+
+* {
+    -fx-border-color: blue;
+    -fx-border-style: dashed;
+    -fx-border-width: 1;
+}

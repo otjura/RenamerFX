@@ -33,7 +33,7 @@ public final class Controller {
     @FXML
     private void initialize() {
         String appStartDir = new File(".").getAbsolutePath();
-        statusText.setText(appStartDir);
+        statusText.setText("Current directory:\n"+appStartDir);
     }
   
     @FXML
