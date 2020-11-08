@@ -30,7 +30,12 @@ public final class FXMLGuiStarter extends Application {
         stage.show();
     }
 
-    public static void launcher(String[] args) {
+    /**
+     * Entry point for GUI
+     * 
+     * @param args passed to Application.launch(args)
+     */
+    static void launcher(String[] args) {
         launch(args);
     }
 

@@ -16,7 +16,7 @@ import static renamerfx.Logic.*;
 /*
  * Exclusively command-line portion of the application.
  */
-public final class App {
+final class App {
     
     private static final String HELP_OPTION = "--help";
     private static final String INTERACTIVE_OPTION = "--interactive";
@@ -177,7 +177,7 @@ public final class App {
      *
      * @param args command line arguments described in help()
      */
-    public static void commandLine(String[] args) {
+    static void commandLine(String[] args) {
         if (args.length == 1) {
             if (args[0].equals(HELP_OPTION)) {
                 help();
