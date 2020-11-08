@@ -1,5 +1,5 @@
 # RenamerFX  
-A simple graphical tool for batch renaming files made with JavaFX. Recurses directory tree and does a text replace on filenames.  
+Tool for batch renaming files. Recurses directory tree and does a text replace on filenames.  
 
 ## Build & Run  
 Requirements:  
@@ -7,6 +7,11 @@ Requirements:
 * Maven  
 
 This is a Maven project not tied to any IDE. Executing `mvn clean javafx:run` in project root should suffice. JavaFX comes in Maven config.  
+
+`mvn build` creates a self-contained executable uberjar in ./target.  
+
+# Use  
+Clicking uberjar or running it without arguments from command-line opens the tool in graphical mode. Giving it arguments runs it in command-line mode.  
 
 ## Disclaimer  
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR  

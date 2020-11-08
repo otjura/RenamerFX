@@ -30,7 +30,7 @@ public final class FXMLGuiStarter extends Application {
         stage.show();
     }
 
-    public static void main(String[] args) {
+    public static void launcher(String[] args) {
         launch(args);
     }
 

@@ -177,11 +177,8 @@ public final class App {
      *
      * @param args command line arguments described in help()
      */
-    public static void main(String[] args) {
-        if (args.length == 0) {
-            help();
-        }
-        else if (args.length == 1) {
+    public static void commandLine(String[] args) {
+        if (args.length == 1) {
             if (args[0].equals(HELP_OPTION)) {
                 help();
             }
