@@ -1,6 +1,6 @@
 /*
  * Copyright Otso Rajala <ojrajala@gmail.com>, 2020
- * 
+ *
  */
 
 package renamerfx;
@@ -35,18 +35,18 @@ final class Logic {
         fileStream.forEach(o -> {
             File file = o.toFile();
             if (file.isFile()) {
-                files.add(file); 
+                files.add(file);
             }
         });
         fileStream.close();
-        
+
         // do this twoliner because ArrayList.toArray() returns Object so can't oneline File[] fileArray = files.toArray();
         File[] fileArray = new File[files.size()];
         fileArray = files.toArray(fileArray); // source.toArray(targetArray)
 
         return fileArray;
     }
-        
+
     /**
     * Renames File objects provided in an input array.
     * Renaming is done in place, replacing the original file. This is default behaviour in common usual tools such as mv and ren.
@@ -74,11 +74,69 @@ final class Logic {
         }
         return renamedFiles;
     }
-    
+
+    // FIXME copypaste code
+    static ArrayList<String> simulateRenaming(String dir, String replaceWhat, String replaceTo) {
+        ArrayList<String> renamed = new ArrayList<>();
+        if (!replaceWhat.isEmpty()) {
+            try {
+                Path dirPath = Paths.get(dir);
+                File[] files = collectFilesRecursively(dirPath);
+                //renamed = renameFiles(files, replaceWhat, replaceTo);
+                for (File file : files) {
+                    if (file.canRead()) {
+                        String filename = file.getName();
+                        String newname = filename.replace(replaceWhat, replaceTo);
+                        if (!filename.equals(newname)) {
+                            renamed.add(filename+" --> "+newname);
+                        }
+                    }
+                }
+            }
+            catch (InvalidPathException e) {
+                e.printStackTrace();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return renamed;
+    }
+
+    static String pprint(ArrayList<String> arr) {
+        StringBuilder sb = new StringBuilder(arr.size());
+        arr.forEach(s -> sb.append(s+"\n"));
+        return sb.toString();
+    }
+
+    static ArrayList<String> fileArrayToStringArrayList(File[] files) {
+        ArrayList<String> arr = new ArrayList<>(files.length);
+        for (File f : files ) {
+            arr.add(f.getName());
+        }
+        return arr;
+    }
+
+    static String fileListing(String dir) {
+        String listing = "";
+        if(checkFolderValidity(dir)) {
+            Path folder = Paths.get(dir);
+            try {
+                File[] files = collectFilesRecursively(folder);
+                ArrayList<String> arr = fileArrayToStringArrayList(files);
+                listing = pprint(arr);
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return listing;
+    }
+
     /**
      * Recursive renamer.
      * Takes string input on all args. Operates silently.
-     * 
+     *
      * @param dir String
      * @param replaceWhat String, has to have something in it
      * @param replaceTo String
@@ -104,8 +162,8 @@ final class Logic {
 
     /**
      * Checks that target directory is operable.
-     * 
-     * @param dir a File object 
+     *
+     * @param dir a File object
      * @return boolean, true on operability
      */
     static boolean checkFolderValidity(File dir) {
@@ -121,12 +179,12 @@ final class Logic {
 
     /**
      * Checks that target directory is operable.
-     * 
+     *
      * @param dir String
      * @return boolean, true on operability
      */
     static boolean checkFolderValidity(String dir) {
         return checkFolderValidity(new File(dir));
     }
-    
+
 }

@@ -13,6 +13,8 @@
 .button {
     -fx-background-color: lightpink;
     -fx-cursor: hand;
+    -fx-border-insets: 5;
+    -fx-background-insets: 5;
 }
 
 .label {
