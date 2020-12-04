@@ -9,20 +9,23 @@
 <?import javafx.scene.text.*?>
 
 <GridPane fx:id="grid" fx:controller="renamerfx.Controller" xmlns:fx="http://javafx.com/fxml">
-
-  <Label text="Directory" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-  <TextField fx:id="dirField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-
-  <Label text="Replace what?" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-  <TextField fx:id="replaceWhatField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-
-  <Label text="Replace to?" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-  <TextField fx:id="replaceToField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-  
-  <HBox fx:id="hbox" GridPane.rowIndex="3">
-    <Button fx:id="actionButton" text="Replace" onAction="#renameFilesAction"/>
-  </HBox>
-
-  <Text fx:id="statusText" text="READY." GridPane.rowIndex="5"/>
-
+  <children>
+    <Label text="Directory" GridPane.columnIndex="0" GridPane.rowIndex="0"
+           GridPane.halignment="RIGHT"/>
+    <TextField fx:id="dirField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+    <Label text="Replace what?" GridPane.columnIndex="0" GridPane.rowIndex="1"
+           GridPane.halignment="RIGHT"/>
+    <TextField fx:id="replaceWhatField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+    <Label text="Replace to?" GridPane.columnIndex="0" GridPane.rowIndex="2"
+           GridPane.halignment="RIGHT"/>
+    <TextField fx:id="replaceToField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+    <HBox GridPane.columnIndex="0" GridPane.rowIndex="3"
+          GridPane.columnSpan="2" alignment="CENTER">
+      <children>
+        <Button fx:id="renamerButton" text="Replace"/>
+      </children>
+    </HBox>
+    <Text fx:id="statusText" text="READY." GridPane.columnIndex="0" GridPane.rowIndex="5"
+          GridPane.columnSpan="2"/>
+  </children>
 </GridPane>

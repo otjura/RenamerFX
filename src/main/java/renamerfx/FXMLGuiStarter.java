@@ -1,6 +1,6 @@
 /*
  * Copyright Otso Rajala <ojrajala@gmail.com>, 2020
- * 
+ *
  */
 
 package renamerfx;
@@ -20,7 +20,8 @@ public final class FXMLGuiStarter extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("GUI.fxml")); // getClassLoader() or Maven won't run this properly
+        // need getClassLoader() or Maven won't run this properly
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("GUI.fxml"));
         Scene scene = new Scene(root);
         scene.getStylesheets().add("style.css");
 
@@ -32,7 +33,7 @@ public final class FXMLGuiStarter extends Application {
 
     /**
      * Entry point for GUI
-     * 
+     *
      * @param args passed to Application.launch(args)
      */
     static void launcher(String[] args) {
