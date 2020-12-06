@@ -37,6 +37,33 @@ public final class Controller implements Initializable {
     @FXML private GridPane grid;
     @FXML private TextArea resultTextArea;
 
+    // set simulate to true to skip actual renaming and see would-be results
+    private void runRename(boolean simulate) {
+        String dir = dirField.getText();
+        String what = replaceWhatField.getText();
+        String to = replaceToField.getText();
+
+        boolean valid = checkFolderValidity(dir);
+
+        if (valid) {
+            String filesRenamed = pprint(renameRecursively(dir, what, to, simulate));
+            if (filesRenamed.isBlank()) {
+                resultTextArea.setText(NOTHINGRENAMED);
+            }
+            else {
+                if (simulate) {
+                    resultTextArea.setText(filesRenamed+"\nWould rename the files as shown.");
+                }
+                else {
+                    resultTextArea.setText(filesRenamed+"\nSuccessfully renamed files!");
+                }
+            }
+        }
+        else {
+            resultTextArea.setText(NOSUCHDIR);
+        }
+    }
+
     public void initialize(URL url, ResourceBundle rb) {
 
         // effects whole grid no need to set for other textfields,
@@ -48,46 +75,17 @@ public final class Controller implements Initializable {
         String appStartDir = new File(".").getAbsolutePath();
         statusText.setText("Current directory:\n"+appStartDir);
 
+        // Rename files, display result on result area
         renamerButton.setOnAction(e -> {
-            String dir = dirField.getText();
-            String what = replaceWhatField.getText();
-            String to = replaceToField.getText();
-
-            boolean valid = checkFolderValidity(dir);
-
-            if (valid) {
-                String filesRenamed = pprint(renameRecursively(dir, what, to));
-                if (filesRenamed.isBlank()) {
-                    resultTextArea.setText(NOTHINGRENAMED);
-                }
-                else {
-                    resultTextArea.setText(filesRenamed+"\nSuccessfully renamed files!");
-                }
-            }
-            else {
-                resultTextArea.setText(NOSUCHDIR);
-            }
+            runRename(false);
         });
 
-        // FIXME copypaste code
+        // Preview renaming on result area without renaming files
         previewButton.setOnAction(e -> {
-            String dir = dirField.getText();
-            String what = replaceWhatField.getText();
-            String to = replaceToField.getText();
-
-            boolean valid = checkFolderValidity(dir);
-            if (valid) {
-                String rens = pprint(simulateRenaming(dir, what, to));
-                if (rens.isBlank()) {
-                    rens = NOTHINGRENAMED;
-                }
-                resultTextArea.setText(rens);
-            }
-            else {
-                resultTextArea.setText(NOSUCHDIR);
-            }
+            runRename(true);
         });
 
+        // List directory content on result area
         dirButton.setOnAction(e -> {
             String files = fileListing(dirField.getText());
             if (files.isBlank()) {

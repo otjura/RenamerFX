@@ -1,6 +1,6 @@
 /*
  * Copyright Otso Rajala <ojrajala@gmail.com>, 2020
- * 
+ *
  */
 
 package renamerfx;
@@ -17,10 +17,10 @@ import static renamerfx.Logic.*;
  * Exclusively command-line portion of the application.
  */
 final class App {
-    
+
     private static final String HELP_OPTION = "--help";
     private static final String INTERACTIVE_OPTION = "--interactive";
-    
+
     /**
     * Yes/no method.
     *
@@ -36,21 +36,21 @@ final class App {
         }
         return yn;
     }
-    
+
     /**
     * Interactive guided renaming.
     *
     */
     private static void interactiveRenaming() {
-        
+
         System.out.println("Hello! Welcome to RenamerFX interactive renaming!");
         Scanner sc = new Scanner(System.in);
-        
+
         String cwd = new File(".").getAbsolutePath();
         System.out.println("Current directory: "+cwd);
-        
+
         String folderPath;
-        
+
         // Ask for root directory from which to get files for renaming and verify its validity for next operations.
 
         while (true) {
@@ -60,29 +60,29 @@ final class App {
                 System.out.println("Can't operate on empty path.");
                 continue;
             }
-            
+
             File folder = new File(folderPath);
 
             if (folder.isFile()) {
                 System.out.println("Need a directory.");
                 continue;
             }
-            
+
             if (!folder.exists()) {
                 System.out.println("Folder doesn't exist. Check path.");
                 continue;
             }
-            
+
             int numberOfItems = Objects.requireNonNull(folder.listFiles()).length; // NOTE: lists both files and directories
-            
+
             if (numberOfItems == 0) {
                 System.out.println("Folder is empty.");
                 continue;
             }
-            
+
             break;
         }
-        
+
         // Collect files recursively into array
 
         File[] files = {};
@@ -93,7 +93,7 @@ final class App {
         catch (IOException e) {
             e.printStackTrace();
         }
-        
+
         // Renaming sequence
 
         String replaceWhat = "";
@@ -106,7 +106,7 @@ final class App {
                 System.out.println("Can't replace nothing.");
                 continue;
             }
-            
+
             System.out.print("Replace that with what?: ");
             replaceTo = sc.nextLine();
             if (replaceWhat.equals(replaceTo)) {
@@ -115,18 +115,18 @@ final class App {
             }
             break;
         }
-        
+
         // Verify acquired files are correct
-        
+
         fileLister(files);
         System.out.print("Rename in these files? (y/n) ");
         boolean yes = yesNoPrompt();
-        
+
         // Commence renaming operation
 
         if (yes) {
             System.out.println("Renaming...");
-            ArrayList<String> renamed = renameFiles(files, replaceWhat, replaceTo);
+            ArrayList<String> renamed = renameFiles(files, replaceWhat, replaceTo, false);
             for (String s : renamed) {
                 System.out.println(s);
             }
@@ -140,7 +140,7 @@ final class App {
         // closing has to be AFTER yesNoPrompt or it messes System.in newline
         sc.close();
     }
-    
+
     /**
     * Prints type and full path filename of File objects in a provided File[] parameter.
     * Printout is one entry per row.
@@ -157,8 +157,8 @@ final class App {
                 e.printStackTrace();
             }
         }
-    } 
-   
+    }
+
     /**
      * Prints help message on console.
      */
@@ -194,7 +194,7 @@ final class App {
                 File dir = new File(args[0]);
                 if (dir.exists() && dir.isDirectory()) {
                     File[] files = collectFilesRecursively(Paths.get(args[0]));
-                    ArrayList<String> renamedFiles = renameFiles(files, args[1], args[2]);
+                    ArrayList<String> renamedFiles = renameFiles(files, args[1], args[2], false);
                     for (String s : renamedFiles) {
                         System.out.println(s);
                     }

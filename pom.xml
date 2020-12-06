@@ -6,7 +6,7 @@
 
   <groupId>renamerfx</groupId>
   <artifactId>RenamerFX</artifactId>
-  <version>1.2.0</version>
+  <version>1.2.1</version>
   <packaging>jar</packaging>
 
   <name>RenamerFX</name>
@@ -87,7 +87,7 @@
         <artifactId>maven-project-info-reports-plugin</artifactId>
         <version>3.1.1</version>
       </plugin>
-      <!-- runs javafx app with: mvn clean javafx:run https://openjfx.io/openjfx-docs/#maven -->
+      <!-- runs javafx app with: mvn javafx:run https://openjfx.io/openjfx-docs/#maven -->
       <plugin>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-maven-plugin</artifactId>

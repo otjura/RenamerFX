@@ -54,61 +54,55 @@ final class Logic {
     * @param files array of File objects
     * @param replaceWhat String to replace in filenames. Assumes no empty String.
     * @param replaceTo String acting as an replacement. Can be empty for deletion.
+    * @param simulate when true doesn't rename anything, but returns new names (dry run)
     * @return ArrayList containing string representations of succeeded renames
     */
-    static ArrayList<String> renameFiles(File[] files, String replaceWhat, String replaceTo) {
+    static ArrayList<String> renameFiles(File[] files, String replaceWhat, String replaceTo, boolean simulate) {
         ArrayList<String> renamedFiles = new ArrayList<>();
         for (File file : files) {
             if (file.canRead()) {
                 String filename = file.getName();
                 String newname = filename.replace(replaceWhat, replaceTo);
-                String fullpath = file.getParent()+"/"; // has absolute path so OS is agnostic about that folder separator
+                String fullpath = file.getParent()+File.separator;
                 String fullnewname = fullpath+newname;
                 if (!filename.equals(newname)) {
-                    boolean canDo = file.renameTo(new File(fullnewname)); // renames files in-place
-                    if (canDo) {
-                        renamedFiles.add(filename+" --> "+newname);
+                    if (!simulate) {
+                        try {
+                            file.renameTo(new File(fullnewname)); // renames files in-place
+                        }
+                        catch (SecurityException e) {
+                            e.printStackTrace();
+                        }
                     }
+                    renamedFiles.add(filename+" --> "+newname);
                 }
             }
         }
         return renamedFiles;
     }
 
-    // FIXME copypaste code
-    static ArrayList<String> simulateRenaming(String dir, String replaceWhat, String replaceTo) {
-        ArrayList<String> renamed = new ArrayList<>();
-        if (!replaceWhat.isEmpty()) {
-            try {
-                Path dirPath = Paths.get(dir);
-                File[] files = collectFilesRecursively(dirPath);
-                //renamed = renameFiles(files, replaceWhat, replaceTo);
-                for (File file : files) {
-                    if (file.canRead()) {
-                        String filename = file.getName();
-                        String newname = filename.replace(replaceWhat, replaceTo);
-                        if (!filename.equals(newname)) {
-                            renamed.add(filename+" --> "+newname);
-                        }
-                    }
-                }
-            }
-            catch (InvalidPathException e) {
-                e.printStackTrace();
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return renamed;
-    }
-
+    /**
+     * Lineated string representation of ArrayList contents.
+     *
+     * @param arr
+     * @return lineated string representation, newline on empty input
+     */
     static String pprint(ArrayList<String> arr) {
+        if (arr.isEmpty()) return "\n";
         StringBuilder sb = new StringBuilder(arr.size());
-        arr.forEach(s -> sb.append(s+"\n"));
+        arr.forEach(s -> {
+            if (s == null) s = "";
+            sb.append(s+"\n");
+        });
         return sb.toString();
     }
 
+    /**
+     * Helper method converting file array to string array
+     *
+     * @param files
+     * @return names of files
+     */
     static ArrayList<String> fileArrayToStringArrayList(File[] files) {
         ArrayList<String> arr = new ArrayList<>(files.length);
         for (File f : files ) {
@@ -117,6 +111,12 @@ final class Logic {
         return arr;
     }
 
+    /**
+     * Lists file names of files in a directory dir
+     *
+     * @param dir path, relative or absolute
+     * @return pretty print of files in directory, empty if no files
+     */
     static String fileListing(String dir) {
         String listing = "";
         if(checkFolderValidity(dir)) {
@@ -137,18 +137,19 @@ final class Logic {
      * Recursive renamer.
      * Takes string input on all args. Operates silently.
      *
-     * @param dir String
-     * @param replaceWhat String, has to have something in it
-     * @param replaceTo String
-     * @return ArrayList containing string representations of succeeded renames
+     * @param dir path relative or absolute
+     * @param replaceWhat
+     * @param replaceTo
+     * @param simulate true to skip renaming
+     * @return succeeded renames as "old --> new"
      */
-    static ArrayList<String> renameRecursively(String dir, String replaceWhat, String replaceTo) {
+    static ArrayList<String> renameRecursively(String dir, String replaceWhat, String replaceTo, boolean simulate) {
         ArrayList<String> renamed = new ArrayList<>();
         if (!replaceWhat.isEmpty()) {
             try {
                 Path dirPath = Paths.get(dir);
                 File[] files = collectFilesRecursively(dirPath);
-                renamed = renameFiles(files, replaceWhat, replaceTo);
+                renamed = renameFiles(files, replaceWhat, replaceTo, simulate);
             }
             catch (InvalidPathException e) {
                 e.printStackTrace();
