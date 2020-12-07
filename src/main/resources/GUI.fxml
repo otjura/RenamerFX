@@ -22,9 +22,9 @@
     <HBox GridPane.columnIndex="0" GridPane.rowIndex="3"
           GridPane.columnSpan="2" alignment="CENTER">
       <children>
-        <Button fx:id="dirButton" text="Show directory contents"/>
-        <Button fx:id="previewButton" text="Preview"/>
-        <Button fx:id="renamerButton" text="Replace"/>
+        <Button fx:id="dirButton" text="[F1] Show directory contents"/>
+        <Button fx:id="previewButton" text="[F2] Preview"/>
+        <Button fx:id="renamerButton" text="[F3] Replace"/>
       </children>
     </HBox>
     <TextArea fx:id="resultTextArea" GridPane.columnIndex="0" GridPane.rowIndex="4"

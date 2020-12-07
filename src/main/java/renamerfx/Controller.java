@@ -9,11 +9,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.text.Text;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.Button;
 import java.io.File;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.net.URL;
 import static renamerfx.Logic.*;
@@ -64,6 +64,18 @@ public final class Controller implements Initializable {
         }
     }
 
+    // lists directory contents on text area
+    private void listDirectory() {
+        String files = fileListing(dirField.getText());
+        if (files.isBlank()) {
+            resultTextArea.setText(NOSUCHDIR);
+        }
+        else {
+            resultTextArea.setText(files);
+        }
+    }
+
+    // first thing that is run when GUI.fxml is loaded
     public void initialize(URL url, ResourceBundle rb) {
 
         // effects whole grid no need to set for other textfields,
@@ -87,13 +99,14 @@ public final class Controller implements Initializable {
 
         // List directory content on result area
         dirButton.setOnAction(e -> {
-            String files = fileListing(dirField.getText());
-            if (files.isBlank()) {
-                resultTextArea.setText(NOSUCHDIR);
-            }
-            else {
-                resultTextArea.setText(files);
-            }
+            listDirectory();
+        });
+
+        // hotkeys bound on grid layer
+        grid.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.F1) listDirectory();
+            if (e.getCode() == KeyCode.F2) runRename(true);
+            if (e.getCode() == KeyCode.F3) runRename(false);
         });
     }
 }
