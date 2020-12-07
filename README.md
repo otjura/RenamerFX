@@ -11,7 +11,7 @@ This is a Maven project not tied to any IDE. Executing `mvn clean javafx:run` in
 `mvn package` creates a self-contained executable uberjar in ./target.
 
 ## Use
-Clicking uberjar or running it without arguments from command-line opens the tool in graphical mode. Giving it arguments (below) runs it in command-line mode.
+Clicking uberjar or running it without arguments from command-line with `java -jar` opens the tool in graphical mode. Giving it arguments runs it in command-line mode, for example `java -jar RenamerFX-1.2.2-uber.jar --help`
 
 ```
 USAGE
