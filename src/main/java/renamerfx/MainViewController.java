@@ -5,6 +5,7 @@
 
 package renamerfx;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.text.Text;
@@ -19,13 +20,14 @@ import java.net.URL;
 import static renamerfx.Logic.*;
 
 /*
- * Methods and stuff for FXML GUI to use.
+ * Methods and fields for GUI.fxml view.
  * Has to be public or FXML fails to load with javafx.fxml.LoadException
  */
-public final class Controller implements Initializable {
+public final class MainViewController implements Initializable {
 
-    private static final String NOSUCHDIR = "Directory doesn't exist or is empty";
-    private static final String NOTHINGRENAMED = "Nothing was renamed";
+    private static final String NO_SUCH_DIR = "Directory doesn't exist or is empty";
+    private static final String NOTHING_RENAMED = "Nothing was renamed";
+    private static final String APP_START_DIR = new File(".").getAbsolutePath();
 
     @FXML private Text statusText;
     @FXML private TextField dirField;
@@ -48,7 +50,7 @@ public final class Controller implements Initializable {
         if (valid) {
             String filesRenamed = pprint(renameRecursively(dir, what, to, simulate));
             if (filesRenamed.isBlank()) {
-                resultTextArea.setText(NOTHINGRENAMED);
+                resultTextArea.setText(NOTHING_RENAMED);
             }
             else {
                 if (simulate) {
@@ -60,7 +62,7 @@ public final class Controller implements Initializable {
             }
         }
         else {
-            resultTextArea.setText(NOSUCHDIR);
+            resultTextArea.setText(NO_SUCH_DIR);
         }
     }
 
@@ -68,24 +70,25 @@ public final class Controller implements Initializable {
     private void listDirectory() {
         String files = fileListing(dirField.getText());
         if (files.isBlank()) {
-            resultTextArea.setText(NOSUCHDIR);
+            resultTextArea.setText(NO_SUCH_DIR);
         }
         else {
             resultTextArea.setText(files);
         }
     }
 
-    // first thing that is run when GUI.fxml is loaded
+    /*
+     * First thing that is run when GUI.fxml is loaded.
+     * Component actions, attributes and events.
+     */
     public void initialize(URL url, ResourceBundle rb) {
 
-        // effects whole grid no need to set for other textfields,
-        // they follow automatically with
-        dirField.setPrefWidth(240);
-
         resultTextArea.setEditable(false);
+        resultTextArea.setPromptText("Results appear here.");
 
-        String appStartDir = new File(".").getAbsolutePath();
-        statusText.setText("Current directory:\n"+appStartDir);
+        statusText.setText("Current directory:\n"+APP_START_DIR);
+
+        dirField.setPromptText("Requires folder path");
 
         // Rename files, display result on result area
         renamerButton.setOnAction(e -> {
@@ -107,6 +110,7 @@ public final class Controller implements Initializable {
             if (e.getCode() == KeyCode.F1) listDirectory();
             if (e.getCode() == KeyCode.F2) runRename(true);
             if (e.getCode() == KeyCode.F3) runRename(false);
+            if (e.getCode() == KeyCode.ESCAPE) Platform.exit();
         });
     }
 }

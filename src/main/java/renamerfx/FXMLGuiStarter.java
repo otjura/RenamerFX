@@ -6,35 +6,42 @@
 package renamerfx;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.Parent;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.fxml.FXMLLoader;
+
+import java.io.IOException;
 
 /*
- * GUI starter class
+ * GUI starter
  */
 public final class FXMLGuiStarter extends Application {
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
+        try {
+            Scene scene = new Scene(FXMLLoader.load(getClass().getClassLoader().getResource("GUI.fxml")));
+            scene.getStylesheets().add("style.css");
 
-        // need getClassLoader() or Maven won't run this properly
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("GUI.fxml"));
-        Scene scene = new Scene(root);
-        scene.getStylesheets().add("style.css");
-
-        stage.setTitle("RenamerFX");
-        stage.getIcons().add(new Image("icon.png"));
-        stage.setScene(scene);
-        stage.show();
+            stage.setTitle("RenamerFX");
+            stage.getIcons().add(new Image("icon.png"));
+            stage.setScene(scene);
+            stage.show();
+        }
+        catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
-     * Entry point for GUI
+     * Entry point for GUI.
+     * See javafx.application.Application lifecycle for what's going on here.
      *
-     * @param args passed to Application.launch(args)
+     * @param args command-line arguments
      */
     static void launcher(String[] args) {
         launch(args);

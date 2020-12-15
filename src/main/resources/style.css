@@ -4,34 +4,31 @@
  */
 
 #grid {
-    -fx-background-color: yellow;
+    -fx-background-color: lightyellow;
     -fx-hgap: 10;
     -fx-vgap: 10;
     -fx-padding: 25;
 }
 
-.button {
-    -fx-background-color: lightpink;
-    -fx-cursor: hand;
-    -fx-border-insets: 5;
-    -fx-background-insets: 5;
+#inputArea {
+    -fx-spacing: 8;
 }
 
-.label {
-    -fx-background-color: lightblue;
+#inputArea .label {
+    -fx-min-width: 90;
 }
 
-.text-field {
-    -fx-background-color: lightgreen;
+#inputArea .text-field {
+    -fx-min-width: 280;
 }
 
-.hbox {
+#buttonGroup {
     -fx-alignment: center;
-    -fx-padding: 10;
+    -fx-spacing: 10;
 }
 
-* {
-    -fx-border-color: darkblue;
-    -fx-border-style: solid;
-    -fx-border-width: 1;
+#buttonGroup .button {
+    -fx-cursor: hand;
+    -fx-spacing: 5;
 }
+

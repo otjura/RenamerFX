@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE xml>
 
-<!-- Copyright Otso Rajala <ojrajala@gmail.com>, 2020 -->
-<?import java.net.*?>
-<?import javafx.geometry.*?>
+<!--
+Copyright Otso Rajala <ojrajala@gmail.com>, 2020
+-->
+
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<GridPane fx:id="grid" fx:controller="renamerfx.Controller" xmlns:fx="http://javafx.com/fxml">
-  <children>
-    <Label text="Directory" GridPane.columnIndex="0" GridPane.rowIndex="0"
-           GridPane.halignment="RIGHT"/>
-    <TextField fx:id="dirField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-    <Label text="Replace what?" GridPane.columnIndex="0" GridPane.rowIndex="1"
-           GridPane.halignment="RIGHT"/>
-    <TextField fx:id="replaceWhatField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-    <Label text="Replace to?" GridPane.columnIndex="0" GridPane.rowIndex="2"
-           GridPane.halignment="RIGHT"/>
-    <TextField fx:id="replaceToField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-    <HBox GridPane.columnIndex="0" GridPane.rowIndex="3"
-          GridPane.columnSpan="2" alignment="CENTER">
-      <children>
-        <Button fx:id="dirButton" text="[F1] Show directory contents"/>
-        <Button fx:id="previewButton" text="[F2] Preview"/>
-        <Button fx:id="renamerButton" text="[F3] Replace"/>
-      </children>
+<GridPane fx:id="grid" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="renamerfx.MainViewController">
+  <VBox fx:id="inputArea" GridPane.columnSpan="2" GridPane.rowIndex="0">
+    <HBox>
+      <Label text="Directory"/>
+      <TextField fx:id="dirField"/>
     </HBox>
-    <TextArea fx:id="resultTextArea" GridPane.columnIndex="0" GridPane.rowIndex="4"
-             GridPane.columnSpan="2"/>  
-    <Text fx:id="statusText" text="READY." GridPane.columnIndex="0" GridPane.rowIndex="5"
-          GridPane.columnSpan="2"/>
-  </children>
+    <HBox>
+      <Label text="Replace what?" />
+      <TextField fx:id="replaceWhatField" />
+    </HBox>
+    <HBox>
+      <Label text="Replace to?" />
+      <TextField fx:id="replaceToField" />
+    </HBox>
+  </VBox>
+  <HBox fx:id="buttonGroup" GridPane.columnSpan="2" GridPane.rowIndex="1">
+    <Button fx:id="dirButton" text="[F1] Show directory contents" />
+    <Button fx:id="previewButton" text="[F2] Preview" />
+    <Button fx:id="renamerButton" text="[F3] Replace" />
+  </HBox>
+  <VBox GridPane.columnSpan="2" GridPane.rowIndex="2">
+    <TextArea fx:id="resultTextArea" />
+    <Text fx:id="statusText" />
+  </VBox>
 </GridPane>

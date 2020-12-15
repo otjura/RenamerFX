@@ -16,7 +16,7 @@ import static renamerfx.Logic.*;
 /*
  * Exclusively command-line portion of the application.
  */
-final class App {
+final class CommandLine {
 
     private static final String HELP_OPTION = "--help";
     private static final String INTERACTIVE_OPTION = "--interactive";
