@@ -14,7 +14,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.Button;
-import java.io.File;
+
 import java.util.ResourceBundle;
 import java.net.URL;
 import static renamerfx.Logic.*;
@@ -27,7 +27,9 @@ public final class MainViewController implements Initializable {
 
     private static final String NO_SUCH_DIR = "Directory doesn't exist or is empty";
     private static final String NOTHING_RENAMED = "Nothing was renamed";
-    private static final String APP_START_DIR = new File(".").getAbsolutePath();
+    private static final String APP_START_DIR = System.getProperty("user.dir");
+    private static final String HOME_DIR = System.getProperty("user.home");
+    private static final String[] HOME_DIR_ALIASES = {"~","$HOME","$home"};
 
     @FXML private Text statusText;
     @FXML private TextField dirField;
@@ -38,6 +40,23 @@ public final class MainViewController implements Initializable {
     @FXML private Button dirButton;
     @FXML private GridPane grid;
     @FXML private TextArea resultTextArea;
+    @FXML private Button setDir;
+
+    // changes current directory to given valid path
+    private void changeDirectory() {
+        String newDir = dirField.getText();
+        for (String s : HOME_DIR_ALIASES) {
+            if (s.equals(newDir)) {
+                newDir = HOME_DIR;
+                break;
+            }
+        }
+        if (isValidFolder(newDir)) {
+            System.setProperty("user.dir", newDir);
+            // TODO always display absolute pathS
+            statusText.setText("Current directory:\n"+toCanonicalPath(System.getProperty("user.dir")));
+        }
+    }
 
     // set simulate to true to skip actual renaming and see would-be results
     private void runRename(boolean simulate) {
@@ -45,9 +64,7 @@ public final class MainViewController implements Initializable {
         String what = replaceWhatField.getText();
         String to = replaceToField.getText();
 
-        boolean valid = checkFolderValidity(dir);
-
-        if (valid) {
+        if (isValidFolder(dir)) {
             String filesRenamed = pprint(renameRecursively(dir, what, to, simulate));
             if (filesRenamed.isBlank()) {
                 resultTextArea.setText(NOTHING_RENAMED);
@@ -66,11 +83,21 @@ public final class MainViewController implements Initializable {
         }
     }
 
-    // lists directory contents on text area
+    // lists given directory contents on text area
     private void listDirectory() {
-        String files = fileListing(dirField.getText());
-        if (files.isBlank()) {
+        String input = dirField.getText();
+        for (String s : HOME_DIR_ALIASES) {
+            if (input.equals(s)) {
+                input = HOME_DIR;
+                break;
+            }
+        }
+        String files = fileListing(input);
+        if (files.isBlank() && !input.isBlank()) {
             resultTextArea.setText(NO_SUCH_DIR);
+        }
+        else if (input.isBlank()) {
+            resultTextArea.setText(fileListing(System.clearProperty("user.dir")));
         }
         else {
             resultTextArea.setText(files);
@@ -105,11 +132,17 @@ public final class MainViewController implements Initializable {
             listDirectory();
         });
 
+        // changes current directory from APP_START_DIR to whatever is on dirField
+        setDir.setOnAction(e -> {
+            changeDirectory();
+        });
+
         // hotkeys bound on grid layer
         grid.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.F1) listDirectory();
             if (e.getCode() == KeyCode.F2) runRename(true);
             if (e.getCode() == KeyCode.F3) runRename(false);
+            if (e.getCode() == KeyCode.F4) changeDirectory();
             if (e.getCode() == KeyCode.ESCAPE) Platform.exit();
         });
     }

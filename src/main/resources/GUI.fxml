@@ -27,6 +27,7 @@ Copyright Otso Rajala <ojrajala@gmail.com>, 2020
     <Button fx:id="dirButton" text="[F1] Show directory contents" />
     <Button fx:id="previewButton" text="[F2] Preview" />
     <Button fx:id="renamerButton" text="[F3] Replace" />
+    <Button fx:id="setDir" text="[F4] Change directory"/>
   </HBox>
   <VBox GridPane.columnSpan="2" GridPane.rowIndex="2">
     <TextArea fx:id="resultTextArea" />

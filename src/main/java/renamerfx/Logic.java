@@ -20,6 +20,25 @@ import java.nio.file.Paths;
 final class Logic {
 
     /**
+     * Converts input string to canonical path.
+     *
+     * @pre path exists & is valid
+     * @param path string representation
+     * @return canonical path on success, empty string on exception
+     */
+    static String toCanonicalPath(String path) {
+        File file = new File(path);
+        String s = "";
+        try {
+            s = file.getCanonicalPath();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return s;
+    }
+
+    /**
     * Recurses a given file tree, returning array of File objects upon success.
     *
     * @param startDirectory Path, assumes it's an existing valid directory
@@ -119,7 +138,7 @@ final class Logic {
      */
     static String fileListing(String dir) {
         String listing = "";
-        if(checkFolderValidity(dir)) {
+        if(isValidFolder(dir)) {
             Path folder = Paths.get(dir);
             try {
                 File[] files = collectFilesRecursively(folder);
@@ -167,7 +186,7 @@ final class Logic {
      * @param dir a File object
      * @return boolean, true on operability
      */
-    static boolean checkFolderValidity(File dir) {
+    static boolean isValidFolder(File dir) {
         try {
             if (dir.exists() && dir.isDirectory())
                 return true;
@@ -184,8 +203,8 @@ final class Logic {
      * @param dir String
      * @return boolean, true on operability
      */
-    static boolean checkFolderValidity(String dir) {
-        return checkFolderValidity(new File(dir));
+    static boolean isValidFolder(String dir) {
+        return isValidFolder(new File(dir));
     }
 
 }
