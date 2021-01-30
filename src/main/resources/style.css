@@ -1,10 +1,9 @@
 /*
  * Copyright Otso Rajala <ojrajala@gmail.com>, 2020
- *
  */
 
 #grid {
-    -fx-background-color: lightyellow;
+    -fx-background-color: #fff;
     -fx-hgap: 10;
     -fx-vgap: 10;
     -fx-padding: 25;
@@ -19,7 +18,7 @@
 }
 
 #inputArea .text-field {
-    -fx-min-width: 280;
+    -fx-pref-width: 400px;
 }
 
 #buttonGroup {
