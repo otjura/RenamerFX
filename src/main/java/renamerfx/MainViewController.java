@@ -8,6 +8,8 @@ package renamerfx;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -29,8 +31,10 @@ public final class MainViewController implements Initializable {
     private static final String NOTHING_RENAMED = "Nothing was renamed";
     private static final String APP_START_DIR = System.getProperty("user.dir");
     private static final String HOME_DIR = System.getProperty("user.home");
-    private static final String[] HOME_DIR_ALIASES = {"~","$HOME","$home"};
+    private static final String[] HOME_DIR_ALIASES = {"~","$HOME"};
 
+    @FXML private VBox inputArea; // intellij says these boxes are not used, they are in fxml file
+    @FXML private HBox buttonGroup;
     @FXML private Text statusText;
     @FXML private TextField dirField;
     @FXML private TextField replaceWhatField;
@@ -45,16 +49,20 @@ public final class MainViewController implements Initializable {
     // changes current directory to given valid path
     private void changeDirectory() {
         String newDir = dirField.getText();
+        boolean aliasedHomeDir = false;
         for (String s : HOME_DIR_ALIASES) {
             if (s.equals(newDir)) {
                 newDir = HOME_DIR;
+                aliasedHomeDir = true;
                 break;
             }
         }
         if (isValidFolder(newDir)) {
             System.setProperty("user.dir", newDir);
-            // TODO always display absolute pathS
-            statusText.setText("Current directory:\n"+toCanonicalPath(System.getProperty("user.dir")));
+            if (aliasedHomeDir) {
+                dirField.setText(toCanonicalPath(System.getProperty("user.dir")));
+            }
+            statusText.setText(toCanonicalPath(System.getProperty("user.dir")));
         }
     }
 
@@ -113,26 +121,20 @@ public final class MainViewController implements Initializable {
         resultTextArea.setEditable(false);
         resultTextArea.setPromptText("Results appear here.");
 
-        statusText.setText("Current directory:\n"+APP_START_DIR);
+        statusText.setText(APP_START_DIR);
 
         dirField.setPromptText("Requires folder path");
 
         // Rename files, display result on result area
-        renamerButton.setOnAction(e -> {
-            runRename(false);
-        });
+        renamerButton.setOnAction(e -> runRename(false));
 
         // Preview renaming on result area without renaming files
-        previewButton.setOnAction(e -> {
-            runRename(true);
-        });
+        previewButton.setOnAction(e -> runRename(true));
 
         // List directory content on result area
-        dirButton.setOnAction(e -> {
-            listDirectory();
-        });
+        dirButton.setOnAction(e -> listDirectory());
 
-        // changes current directory from APP_START_DIR to whatever is on dirField
+        // changes current directory to whatever is on dirField
         setDir.setOnAction(e -> {
             changeDirectory();
         });

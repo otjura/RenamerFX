@@ -29,10 +29,7 @@ public final class FXMLGuiStarter extends Application {
             stage.setScene(scene);
             stage.show();
         }
-        catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-        catch (IOException e) {
+        catch (NullPointerException | IOException e) {
             e.printStackTrace();
         }
     }

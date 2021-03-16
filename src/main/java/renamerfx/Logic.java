@@ -10,7 +10,6 @@ import java.util.stream.Stream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -22,15 +21,13 @@ final class Logic {
     /**
      * Converts input string to canonical path.
      *
-     * @pre path exists & is valid
      * @param path string representation
      * @return canonical path on success, empty string on exception
      */
     static String toCanonicalPath(String path) {
-        File file = new File(path);
         String s = "";
         try {
-            s = file.getCanonicalPath();
+            s = new File(path).getCanonicalPath();
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -87,7 +84,10 @@ final class Logic {
                 if (!filename.equals(newname)) {
                     if (!simulate) {
                         try {
-                            file.renameTo(new File(fullnewname)); // renames files in-place
+                            boolean succ = file.renameTo(new File(fullnewname)); // renames files in-place
+                            if (!succ) {
+                                renamedFiles.add("ERROR "+filename+" couldn't be renamed!");
+                            }
                         }
                         catch (SecurityException e) {
                             e.printStackTrace();
@@ -103,7 +103,7 @@ final class Logic {
     /**
      * Lineated string representation of ArrayList contents.
      *
-     * @param arr
+     * @param arr any string array
      * @return lineated string representation, newline on empty input
      */
     static String pprint(ArrayList<String> arr) {
@@ -111,7 +111,8 @@ final class Logic {
         StringBuilder sb = new StringBuilder(arr.size());
         arr.forEach(s -> {
             if (s == null) s = "";
-            sb.append(s+"\n");
+            sb.append(s);
+            sb.append("\n");
         });
         return sb.toString();
     }
@@ -119,7 +120,7 @@ final class Logic {
     /**
      * Helper method converting file array to string array
      *
-     * @param files
+     * @param files array of valid file objects
      * @return names of files
      */
     static ArrayList<String> fileArrayToStringArrayList(File[] files) {
@@ -157,8 +158,8 @@ final class Logic {
      * Takes string input on all args. Operates silently.
      *
      * @param dir path relative or absolute
-     * @param replaceWhat
-     * @param replaceTo
+     * @param replaceWhat string to be replaced
+     * @param replaceTo string to replace replaceWhat to
      * @param simulate true to skip renaming
      * @return succeeded renames as "old --> new"
      */
@@ -169,9 +170,6 @@ final class Logic {
                 Path dirPath = Paths.get(dir);
                 File[] files = collectFilesRecursively(dirPath);
                 renamed = renameFiles(files, replaceWhat, replaceTo, simulate);
-            }
-            catch (InvalidPathException e) {
-                e.printStackTrace();
             }
             catch (IOException e) {
                 e.printStackTrace();
@@ -188,9 +186,7 @@ final class Logic {
      */
     static boolean isValidFolder(File dir) {
         try {
-            if (dir.exists() && dir.isDirectory())
-                return true;
-            return false;
+            return dir.exists() && dir.isDirectory();
         }
         catch (SecurityException e) {
             return false;
