@@ -8,29 +8,30 @@ Copyright Otso Rajala <ojrajala@gmail.com>, 2020
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<GridPane fx:id="grid" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.2" fx:controller="renamerfx.MainViewController">
+<GridPane fx:id="grid" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.2"
+          fx:controller="com.github.otjura.renamerfx.gui.MainViewController">
   <VBox fx:id="inputArea" GridPane.columnSpan="2" GridPane.rowIndex="0">
     <HBox>
       <Label text="Directory"/>
       <TextField fx:id="dirField"/>
     </HBox>
     <HBox>
-      <Label text="Replace what?" />
-      <TextField fx:id="replaceWhatField" />
+      <Label text="Replace what?"/>
+      <TextField fx:id="replaceWhatField"/>
     </HBox>
     <HBox>
-      <Label text="Replace to?" />
-      <TextField fx:id="replaceToField" />
+      <Label text="Replace to?"/>
+      <TextField fx:id="replaceToField"/>
     </HBox>
   </VBox>
   <HBox fx:id="buttonGroup" GridPane.columnSpan="2" GridPane.rowIndex="1">
-    <Button fx:id="dirButton" text="[F1] Show directory contents" />
-    <Button fx:id="previewButton" text="[F2] Preview" />
-    <Button fx:id="renamerButton" text="[F3] Replace" />
+    <Button fx:id="dirButton" text="[F1] Show directory contents"/>
+    <Button fx:id="previewButton" text="[F2] Preview"/>
+    <Button fx:id="renamerButton" text="[F3] Replace"/>
     <Button fx:id="setDir" text="[F4] Change directory"/>
   </HBox>
   <VBox GridPane.columnSpan="2" GridPane.rowIndex="2">
-    <TextArea fx:id="resultTextArea" />
-    <Text fx:id="statusText" />
+    <TextArea fx:id="resultTextArea"/>
+    <Text fx:id="statusText"/>
   </VBox>
 </GridPane>

@@ -3,7 +3,7 @@
  *
  */
 
-package renamerfx;
+package com.github.otjura.renamerfx.gui;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -12,16 +12,19 @@ import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 
 import java.io.IOException;
+import java.util.Objects;
 
-/*
- * GUI starter
+/**
+ * GUI starter class, responsible for loading resources for GUI before diplaying it.
  */
-public final class FXMLGuiStarter extends Application {
+public final class FXMLGuiStarter extends Application
+{
 
     @Override
     public void start(Stage stage) {
         try {
-            Scene scene = new Scene(FXMLLoader.load(getClass().getClassLoader().getResource("GUI.fxml")));
+            Scene scene = new Scene(FXMLLoader.load(
+					Objects.requireNonNull(getClass().getClassLoader().getResource("GUI.fxml"))));
             scene.getStylesheets().add("style.css");
 
             stage.setTitle("RenamerFX");
@@ -34,14 +37,15 @@ public final class FXMLGuiStarter extends Application {
         }
     }
 
-    /**
-     * Entry point for GUI.
-     * See javafx.application.Application lifecycle for what's going on here.
-     *
-     * @param args command-line arguments
-     */
-    static void launcher(String[] args) {
-        launch(args);
-    }
+	/**
+	 * Entry point for GUI. See javafx.application.Application lifecycle for what's going on here.
+	 *
+	 * @param args
+	 * 		command-line arguments
+	 */
+	public static void launcher(String[] args)
+	{
+		launch(args);
+	}
 
 }

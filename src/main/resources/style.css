@@ -3,31 +3,31 @@
  */
 
 #grid {
-    -fx-background-color: #fff;
-    -fx-hgap: 10;
-    -fx-vgap: 10;
-    -fx-padding: 25;
+  -fx-background-color: #fff;
+  -fx-hgap: 10;
+  -fx-vgap: 10;
+  -fx-padding: 25;
 }
 
 #inputArea {
-    -fx-spacing: 8;
+  -fx-spacing: 8;
 }
 
 #inputArea .label {
-    -fx-min-width: 90;
+  -fx-min-width: 90;
 }
 
 #inputArea .text-field {
-    -fx-pref-width: 400px;
+  -fx-pref-width: 400px;
 }
 
 #buttonGroup {
-    -fx-alignment: center;
-    -fx-spacing: 10;
+  -fx-alignment: center;
+  -fx-spacing: 10;
 }
 
 #buttonGroup .button {
-    -fx-cursor: hand;
-    -fx-spacing: 5;
+  -fx-cursor: hand;
+  -fx-spacing: 5;
 }
 
