@@ -6,12 +6,14 @@ Requirements:
 * Java 11
 * Maven
 
-This is a Maven project not tied to any IDE. Executing `mvn clean javafx:run` in project root should suffice to run it. JavaFX comes in Maven config.
+This is a Maven project not tied to any IDE. Executing `mvn clean javafx:run` in project root should suffice to run it. 
+avaFX comes in Maven config.
 
 `mvn package` creates a self-contained executable uberjar in ./target.
 
 ## Use
-Clicking uberjar or running it without arguments from command-line with `java -jar` opens the tool in graphical mode. Giving it arguments runs it in command-line mode, for example `java -jar RenamerFX-1.2.2-uber.jar --help`
+Clicking uberjar or running it without arguments from command-line with `java -jar` opens the tool in graphical mode. 
+Giving it arguments runs it in command-line mode, for example `java -jar RenamerFX-1.2.2-uber.jar --help`
 
 ```
 USAGE
@@ -21,11 +23,12 @@ renamerfx <folder> <stringToReplace> <replacementString>
 --interactive for interactive mode
 ```
 
-## Disclaimer
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+## License
+This software is licensed under GPLv3. For the full license text, see file LICENSE.
+
+## Contributing
+Use the provided IntelliJ_Hybrid_Bjarne style on all code work on this project and make sure your code is readable and 
+if it's not readable comment it well. You have an idea on how to improve this? Implement it and send a pull request.
+
+That said, the project goal is to be the premier cross-platform graphical renamer application, capable of doing a wide 
+range of actions, obvious to end-user.
