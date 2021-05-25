@@ -130,6 +130,7 @@ public final class MainViewController implements Initializable
 
     /**
      * First thing that is run when GUI.fxml is loaded. Initializes component actions, attributes and events.
+     * In other words, this is where the defaults are set.
      *
      * @param location
      *         URL, either local or remote.
@@ -140,8 +141,15 @@ public final class MainViewController implements Initializable
     {
         resultTextArea.setEditable(false);
         resultTextArea.setPromptText("Results appear here.");
+
         statusText.setText(APP_START_DIR);
+
         dirField.setPromptText("Requires folder path");
+        dirField.setText(APP_START_DIR);
+        dirField.requestFocus();
+
+        // shitty hack to work around javafx bug/feature where selected field contents are also selected
+        dirField.setFocusTraversable(false); // cant come back to this with tab anymore so find a better way
 
         // Rename files, display result on result area
         renamerButton.setOnAction(e -> runRename(false));
