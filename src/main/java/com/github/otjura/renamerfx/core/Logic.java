@@ -29,10 +29,12 @@ public final class Logic
      */
     public static String toCanonicalPath(String path)
     {
-        try {
+        try
+        {
             return new File(path).getCanonicalPath();
         }
-        catch (IOException e) {
+        catch (IOException e)
+        {
             e.printStackTrace();
         }
         return "";
@@ -57,16 +59,16 @@ public final class Logic
         // if try-catching below stream operation, the following nag happens:
         // "Local variable files defined in an enclosing scope must be final or effectively final"
         // ^^throwing simplifies code a lot here
-        fileStream.forEach(o -> {
+        fileStream.forEach(o ->
+        {
             File file = o.toFile();
-            if (file.isFile()) {
+            if (file.isFile())
+            {
                 files.add(file);
             }
         });
         fileStream.close();
 
-        // do this twoliner because ArrayList.toArray() returns Object so can't oneline File[] fileArray = files
-        // .toArray();
         File[] fileArray = new File[files.size()];
         fileArray = files.toArray(fileArray); // source.toArray(targetArray)
 
@@ -92,21 +94,27 @@ public final class Logic
     {
         List<String> renamedFiles = new ArrayList<>();
 
-        for (File file : files) {
-            if (file.canRead()) {
+        for (File file : files)
+        {
+            if (file.canRead())
+            {
                 String filename = file.getName();
                 String newname = filename.replace(replaceWhat, replaceTo);
                 String fullpath = file.getParent() + File.separator;
                 String fullnewname = fullpath + newname;
-                if (!filename.equals(newname)) {
-                    if (!simulate) {
-                        try {
-                            boolean succ = file.renameTo(new File(fullnewname)); // renames files in-place
-                            if (!succ) {
+                if (!filename.equals(newname))
+                {
+                    if (!simulate)
+                    {
+                        try
+                        {
+                            if (!file.renameTo(new File(fullnewname))) // renames files returning success/failure
+                            {
                                 renamedFiles.add("ERROR " + filename + " couldn't be renamed!");
                             }
                         }
-                        catch (SecurityException e) {
+                        catch (SecurityException e)
+                        {
                             e.printStackTrace();
                         }
                     }
@@ -128,11 +136,16 @@ public final class Logic
     public static String pprint(List<String> arr)
     {
         if (arr.isEmpty())
+        {
             return "\n";
+        }
         StringBuilder sb = new StringBuilder(arr.size());
-        arr.forEach(s -> {
+        arr.forEach(s ->
+        {
             if (s == null)
+            {
                 s = "";
+            }
             sb.append(s);
             sb.append("\n");
         });
@@ -151,7 +164,8 @@ public final class Logic
     {
         List<String> arr = new ArrayList<>(files.length);
 
-        for (File f : files) {
+        for (File f : files)
+        {
             arr.add(f.getName());
         }
         return arr;
@@ -169,14 +183,17 @@ public final class Logic
     {
         String listing = "";
 
-        if (isValidFolder(dir)) {
+        if (isValidFolder(dir))
+        {
             Path folder = Paths.get(dir);
-            try {
+            try
+            {
                 File[] files = collectFilesRecursively(folder);
                 List<String> arr = fileArrayToStringList(files);
                 listing = pprint(arr);
             }
-            catch (IOException e) {
+            catch (IOException e)
+            {
                 e.printStackTrace();
             }
         }
@@ -201,13 +218,16 @@ public final class Logic
     {
         List<String> renamed = new ArrayList<>();
 
-        if (!replaceWhat.isEmpty()) {
-            try {
+        if (!replaceWhat.isEmpty())
+        {
+            try
+            {
                 Path dirPath = Paths.get(dir);
                 File[] files = collectFilesRecursively(dirPath);
                 renamed = renameFiles(files, replaceWhat, replaceTo, simulate);
             }
-            catch (IOException e) {
+            catch (IOException e)
+            {
                 e.printStackTrace();
             }
         }
@@ -224,10 +244,12 @@ public final class Logic
      */
     public static boolean isValidFolder(File dir)
     {
-        try {
+        try
+        {
             return dir.exists() && dir.isDirectory();
         }
-        catch (SecurityException e) {
+        catch (SecurityException e)
+        {
             e.printStackTrace();
             return false;
         }

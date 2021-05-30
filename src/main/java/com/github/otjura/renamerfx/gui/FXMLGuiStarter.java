@@ -22,7 +22,8 @@ public final class FXMLGuiStarter extends Application
 
     @Override public void start(Stage stage)
     {
-        try {
+        try
+        {
             Scene scene = new Scene(FXMLLoader.load(Objects.requireNonNull(
                     getClass().getClassLoader().getResource("GUI.fxml"))));
             scene.getStylesheets().add("style.css");
@@ -32,7 +33,8 @@ public final class FXMLGuiStarter extends Application
             stage.setScene(scene);
             stage.show();
         }
-        catch (NullPointerException | IOException e) {
+        catch (NullPointerException | IOException e)
+        {
             e.printStackTrace();
         }
     }

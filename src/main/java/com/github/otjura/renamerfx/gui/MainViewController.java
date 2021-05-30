@@ -54,16 +54,20 @@ public final class MainViewController implements Initializable
         String newDir = dirField.getText();
 
         boolean aliasedHomeDir = false;
-        for (String s : HOME_DIR_ALIASES) {
-            if (s.equals(newDir)) {
+        for (String s : HOME_DIR_ALIASES)
+        {
+            if (s.equals(newDir))
+            {
                 newDir = HOME_DIR;
                 aliasedHomeDir = true;
                 break;
             }
         }
-        if (isValidFolder(newDir)) {
+        if (isValidFolder(newDir))
+        {
             System.setProperty("user.dir", newDir);
-            if (aliasedHomeDir) {
+            if (aliasedHomeDir)
+            {
                 dirField.setText(toCanonicalPath(System.getProperty("user.dir")));
             }
             statusText.setText(toCanonicalPath(System.getProperty("user.dir")));
@@ -84,19 +88,24 @@ public final class MainViewController implements Initializable
         String what = replaceWhatField.getText();
         String to = replaceToField.getText();
 
-        if (isValidFolder(dir)) {
+        if (isValidFolder(dir))
+        {
             String filesRenamed = pprint(renameRecursively(dir, what, to, simulate));
-            if (filesRenamed.isBlank()) {
+            if (filesRenamed.isBlank())
+            {
                 resultTextArea.setText(NOTHING_RENAMED);
             }
-            else if (simulate) {
+            else if (simulate)
+            {
                 resultTextArea.setText(filesRenamed + "\nWould rename the files as shown.");
             }
-            else {
+            else
+            {
                 resultTextArea.setText(filesRenamed + "\nSuccessfully renamed files!");
             }
         }
-        else {
+        else
+        {
             resultTextArea.setText(NO_SUCH_DIR);
         }
     }
@@ -108,8 +117,10 @@ public final class MainViewController implements Initializable
     {
         String input = dirField.getText();
 
-        for (String s : HOME_DIR_ALIASES) {
-            if (input.equals(s)) {
+        for (String s : HOME_DIR_ALIASES)
+        {
+            if (input.equals(s))
+            {
                 input = HOME_DIR;
                 break;
             }
@@ -117,13 +128,16 @@ public final class MainViewController implements Initializable
 
         String files = fileListing(input);
 
-        if (files.isBlank() && !input.isBlank()) {
+        if (files.isBlank() && !input.isBlank())
+        {
             resultTextArea.setText(NO_SUCH_DIR);
         }
-        else if (input.isBlank()) {
+        else if (input.isBlank())
+        {
             resultTextArea.setText(fileListing(System.clearProperty("user.dir")));
         }
-        else {
+        else
+        {
             resultTextArea.setText(files);
         }
     }
@@ -164,20 +178,26 @@ public final class MainViewController implements Initializable
         setDir.setOnAction(e -> changeDirectory());
 
         // hotkeys bound on grid layer
-        grid.setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.F1) {
+        grid.setOnKeyPressed(e ->
+        {
+            if (e.getCode() == KeyCode.F1)
+            {
                 listDirectory();
             }
-            else if (e.getCode() == KeyCode.F2) {
+            else if (e.getCode() == KeyCode.F2)
+            {
                 runRename(true);
             }
-            else if (e.getCode() == KeyCode.F3) {
+            else if (e.getCode() == KeyCode.F3)
+            {
                 runRename(false);
             }
-            else if (e.getCode() == KeyCode.F4) {
+            else if (e.getCode() == KeyCode.F4)
+            {
                 changeDirectory();
             }
-            else if (e.getCode() == KeyCode.ESCAPE) {
+            else if (e.getCode() == KeyCode.ESCAPE)
+            {
                 Platform.exit();
             }
         });

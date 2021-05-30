@@ -47,22 +47,27 @@ public final class CommandLine
         String folderPath;
 
         // Ask for root directory from which to get files for renaming and verify its validity for next operations.
-        while (true) {
+        while (true)
+        {
             System.out.print("Rename items in what directory?: ");
             folderPath = sc.nextLine();
-            if (folderPath.isEmpty()) {
+
+            if (folderPath.isEmpty())
+            {
                 System.out.println("Can't operate on empty path.");
                 continue;
             }
 
             File folder = new File(folderPath);
 
-            if (folder.isFile()) {
+            if (folder.isFile())
+            {
                 System.out.println("Need a directory.");
                 continue;
             }
 
-            if (!folder.exists()) {
+            if (!folder.exists())
+            {
                 System.out.println("Folder doesn't exist. Check path.");
                 continue;
             }
@@ -70,7 +75,8 @@ public final class CommandLine
             int numberOfItems = Objects
                     .requireNonNull(folder.listFiles()).length; // NOTE: lists both files and directories
 
-            if (numberOfItems == 0) {
+            if (numberOfItems == 0)
+            {
                 System.out.println("Folder is empty.");
                 continue;
             }
@@ -80,10 +86,12 @@ public final class CommandLine
 
         // Collect files recursively into array
         File[] files = {};
-        try {
+        try
+        {
             files = collectFilesRecursively(Paths.get(folderPath));
         }
-        catch (IOException e) {
+        catch (IOException e)
+        {
             e.printStackTrace();
         }
 
@@ -91,17 +99,20 @@ public final class CommandLine
         String replaceWhat = "";
         String replaceTo = "";
 
-        while (true) {
+        while (true)
+        {
             System.out.print("Replace what in filenames?: ");
             replaceWhat = sc.nextLine();
-            if (replaceWhat.isEmpty()) {
+            if (replaceWhat.isEmpty())
+            {
                 System.out.println("Can't replace nothing.");
                 continue;
             }
 
             System.out.print("Replace that with what?: ");
             replaceTo = sc.nextLine();
-            if (replaceWhat.equals(replaceTo)) {
+            if (replaceWhat.equals(replaceTo))
+            {
                 System.out.println("Same strings, won't do a thing.");
                 continue;
             }
@@ -114,15 +125,18 @@ public final class CommandLine
         boolean yes = yesNoPrompt();
 
         // Commence renaming operation
-        if (yes) {
+        if (yes)
+        {
             System.out.println("Renaming...");
             List<String> renamed = renameFiles(files, replaceWhat, replaceTo, false);
-            for (String s : renamed) {
+            for (String s : renamed)
+            {
                 System.out.println(s);
             }
             System.out.println("Done!");
         }
-        else {
+        else
+        {
             System.out.println("Quitting without renaming...");
         }
 
@@ -139,12 +153,15 @@ public final class CommandLine
      */
     private static void fileLister(File[] files)
     {
-        for (File file : files) {
+        for (File file : files)
+        {
             String type = file.isFile() ? "FILE" : "DIRECTORY";
-            try {
+            try
+            {
                 System.out.println(type + ": " + file.getCanonicalPath());
             }
-            catch (IOException e) {
+            catch (IOException e)
+            {
                 e.printStackTrace();
             }
         }
@@ -157,9 +174,9 @@ public final class CommandLine
     {
         System.out.printf("USAGE\n" +
                         "renamerfx <folder> <stringToReplace> <replacementString>\n\n" +
-                        "%s for this " +
-                        "help\n" +
-                        "%s for interactive mode\n\n", HELP_OPTION, INTERACTIVE_OPTION);
+                        "%s for this help\n" +
+                        "%s for interactive mode\n\n",
+                HELP_OPTION, INTERACTIVE_OPTION);
     }
 
     /**
@@ -171,41 +188,50 @@ public final class CommandLine
     public static void commandLine(String[] args)
     {
         // Interactive renaming and help
-        if (args.length == 1) {
-            if (args[0].equals(HELP_OPTION)) {
+        if (args.length == 1)
+        {
+            if (args[0].equals(HELP_OPTION))
+            {
                 help();
             }
-            else if (args[0].equals(INTERACTIVE_OPTION)) {
+            else if (args[0].equals(INTERACTIVE_OPTION))
+            {
                 interactiveRenaming();
             }
-            else {
+            else
+            {
                 help();
             }
         }
-        /*
-         * Renames as purely args based program without interactivity, where
-         * args[directory, replaceWhat, replaceTo]
-         */
-        else if (args.length == 3) {
-            try {
+        // Rename as purely args based program without interactivity, where
+        // args[directory, replaceWhat, replaceTo]
+        else if (args.length == 3)
+        {
+            try
+            {
                 File dir = new File(args[0]);
-                if (dir.exists() && dir.isDirectory()) {
+                if (dir.exists() && dir.isDirectory())
+                {
                     File[] files = collectFilesRecursively(Paths.get(args[0]));
                     List<String> renamedFiles = renameFiles(files, args[1], args[2], false);
-                    for (String s : renamedFiles) {
+                    for (String s : renamedFiles)
+                    {
                         System.out.println(s);
                     }
                 }
-                else {
+                else
+                {
                     System.out.println("Error: directory not valid.\n");
                 }
             }
-            catch (IOException e) {
+            catch (IOException e)
+            {
                 System.out.println("Something went wrong...");
                 e.printStackTrace();
             }
         }
-        else {
+        else
+        {
             System.out.println("Supply all arguments for non-interactive batch renaming:");
             help();
         }

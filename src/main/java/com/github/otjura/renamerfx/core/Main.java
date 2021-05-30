@@ -19,10 +19,12 @@ public class Main
      */
     public static void main(String[] args)
     {
-        if (args.length != 0) {
+        if (args.length != 0)
+        {
             com.github.otjura.renamerfx.cli.CommandLine.commandLine(args);
         }
-        else {
+        else
+        {
             com.github.otjura.renamerfx.gui.FXMLGuiStarter.launcher(args);
         }
     }
