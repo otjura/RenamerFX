@@ -5,6 +5,7 @@
 
 package com.github.otjura.renamerfx.cli;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
@@ -85,7 +86,7 @@ public final class CommandLine
         }
 
         // Collect files recursively into array
-        File[] files = {};
+        List<File> files = new ArrayList<>();
         try
         {
             files = collectFilesRecursively(Paths.get(folderPath));
@@ -149,9 +150,9 @@ public final class CommandLine
      * Printout is one entry per row.
      *
      * @param files
-     *         File[] of length > 0
+     *         list of length > 0
      */
-    private static void fileLister(File[] files)
+    private static void fileLister(List<File> files)
     {
         for (File file : files)
         {
@@ -212,7 +213,7 @@ public final class CommandLine
                 File dir = new File(args[0]);
                 if (dir.exists() && dir.isDirectory())
                 {
-                    File[] files = collectFilesRecursively(Paths.get(args[0]));
+                    List<File> files = collectFilesRecursively(Paths.get(args[0]));
                     List<String> renamedFiles = renameFiles(files, args[1], args[2], false);
                     for (String s : renamedFiles)
                     {

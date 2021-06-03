@@ -51,7 +51,7 @@ public final class Logic
      * @throws IOException
      *         in case something goes wrong reading files
      */
-    public static File[] collectFilesRecursively(Path startDirectory) throws IOException
+    public static List<File> collectFilesRecursively(Path startDirectory) throws IOException
     {
         Stream<Path> fileStream = Files.walk(startDirectory);
         List<File> files = new ArrayList<>();
@@ -69,10 +69,7 @@ public final class Logic
         });
         fileStream.close();
 
-        File[] fileArray = new File[files.size()];
-        fileArray = files.toArray(fileArray); // source.toArray(targetArray)
-
-        return fileArray;
+        return files;
     }
 
     /**
@@ -80,7 +77,7 @@ public final class Logic
      * This is default behaviour in common usual tools such as mv and ren.
      *
      * @param files
-     *         array of File objects
+     *         list of File objects
      * @param replaceWhat
      *         String to replace in filenames. Assumes no empty String.
      * @param replaceTo
@@ -90,7 +87,7 @@ public final class Logic
      *
      * @return List containing string representations of succeeded renames
      */
-    public static List<String> renameFiles(File[] files, String replaceWhat, String replaceTo, boolean simulate)
+    public static List<String> renameFiles(List<File> files, String replaceWhat, String replaceTo, boolean simulate)
     {
         List<String> renamedFiles = new ArrayList<>();
 
@@ -156,13 +153,13 @@ public final class Logic
      * Helper method converting file array to string array
      *
      * @param files
-     *         array of valid file objects
+     *         list of valid file objects
      *
      * @return names of files
      */
-    public static List<String> fileArrayToStringList(File[] files)
+    public static List<String> fileArrayToStringList(List<File> files)
     {
-        List<String> arr = new ArrayList<>(files.length);
+        List<String> arr = new ArrayList<>(files.size());
 
         for (File f : files)
         {
@@ -188,7 +185,7 @@ public final class Logic
             Path folder = Paths.get(dir);
             try
             {
-                File[] files = collectFilesRecursively(folder);
+                List<File> files = collectFilesRecursively(folder);
                 List<String> arr = fileArrayToStringList(files);
                 listing = pprint(arr);
             }
@@ -223,7 +220,7 @@ public final class Logic
             try
             {
                 Path dirPath = Paths.get(dir);
-                File[] files = collectFilesRecursively(dirPath);
+                List<File> files = collectFilesRecursively(dirPath);
                 renamed = renameFiles(files, replaceWhat, replaceTo, simulate);
             }
             catch (IOException e)
