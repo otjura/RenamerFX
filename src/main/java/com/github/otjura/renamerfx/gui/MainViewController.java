@@ -5,20 +5,22 @@
 
 package com.github.otjura.renamerfx.gui;
 
+import com.github.otjura.renamerfx.core.StringTuple;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.control.TextArea;
-import javafx.scene.layout.GridPane;
-import javafx.scene.control.Button;
 
-import java.util.ResourceBundle;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 import static com.github.otjura.renamerfx.core.Logic.*;
 
@@ -80,7 +82,7 @@ public final class MainViewController implements Initializable
      * anything.
      *
      * @param simulate
-     *         TRUE to skip renaming and only display would-be results, FALSE to run the rename and display results
+     *         TRUE to skip renaming and only display would-be results, FALSE to run rename and display results
      */
     private void runRename(boolean simulate)
     {
@@ -90,7 +92,13 @@ public final class MainViewController implements Initializable
 
         if (isValidFolder(dir))
         {
-            String filesRenamed = pprint(renameRecursively(dir, what, to, simulate));
+            var oldNewNames = renameRecursively(dir, what, to, simulate);
+            var namesAsString = new ArrayList<String>();
+            for (StringTuple st : oldNewNames)
+            {
+                namesAsString.add("Renamed " + st.getString1() + " to " + st.getString2());
+            }
+            String filesRenamed = pprint(namesAsString);
             if (filesRenamed.isBlank())
             {
                 resultTextArea.setText(NOTHING_RENAMED);
@@ -163,7 +171,7 @@ public final class MainViewController implements Initializable
         dirField.requestFocus();
 
         // shitty hack to work around javafx bug/feature where selected field contents are also selected
-        dirField.setFocusTraversable(false); // cant come back to this with tab anymore so find a better way
+        dirField.setFocusTraversable(false); // can't come back to this with tab, so find a better way
 
         // Rename files, display result on result area
         renamerButton.setOnAction(e -> runRename(false));

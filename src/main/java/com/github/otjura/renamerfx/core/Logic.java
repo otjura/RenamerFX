@@ -5,14 +5,14 @@
 
 package com.github.otjura.renamerfx.core;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Common static methods for both GUI and command-line.
@@ -81,15 +81,16 @@ public final class Logic
      * @param replaceWhat
      *         String to replace in filenames. Assumes no empty String.
      * @param replaceTo
-     *         String acting as an replacement. Can be empty for deletion.
+     *         String acting as a replacement. Can be empty for deletion.
      * @param simulate
      *         when true doesn't rename anything, but returns new names (dry run)
      *
      * @return List containing string representations of succeeded renames
      */
-    public static List<String> renameFiles(List<File> files, String replaceWhat, String replaceTo, boolean simulate)
+    public static List<StringTuple> renameFiles(List<File> files, String replaceWhat, String replaceTo,
+            boolean simulate)
     {
-        List<String> renamedFiles = new ArrayList<>();
+        List<StringTuple> renamedFiles = new ArrayList<>();
 
         for (File file : files)
         {
@@ -107,7 +108,7 @@ public final class Logic
                         {
                             if (!file.renameTo(new File(fullnewname))) // renames files returning success/failure
                             {
-                                renamedFiles.add("ERROR " + filename + " couldn't be renamed!");
+                                renamedFiles.add(new StringTuple("ERROR " + filename + " couldn't be renamed!", ""));
                             }
                         }
                         catch (SecurityException e)
@@ -115,7 +116,7 @@ public final class Logic
                             e.printStackTrace();
                         }
                     }
-                    renamedFiles.add(filename + " --> " + newname);
+                    renamedFiles.add(new StringTuple(filename, newname));
                 }
             }
         }
@@ -209,11 +210,12 @@ public final class Logic
      * @param simulate
      *         true to skip renaming
      *
-     * @return succeeded renames as "oldName --> newName"
+     * @return succeeded renames as a list of string tuples where [oldname, newname]
      */
-    public static List<String> renameRecursively(String dir, String replaceWhat, String replaceTo, boolean simulate)
+    public static List<StringTuple> renameRecursively(String dir, String replaceWhat, String replaceTo,
+            boolean simulate)
     {
-        List<String> renamed = new ArrayList<>();
+        List<StringTuple> renamed = new ArrayList<>();
 
         if (!replaceWhat.isEmpty())
         {

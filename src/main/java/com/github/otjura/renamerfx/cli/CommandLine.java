@@ -5,15 +5,18 @@
 
 package com.github.otjura.renamerfx.cli;
 
+import com.github.otjura.renamerfx.core.StringTuple;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Paths;
 
-import static com.github.otjura.renamerfx.core.Logic.*;
+import static com.github.otjura.renamerfx.core.Logic.collectFilesRecursively;
+import static com.github.otjura.renamerfx.core.Logic.renameFiles;
 
 /**
  * Exclusively command-line portion of the application.
@@ -97,8 +100,8 @@ public final class CommandLine
         }
 
         // Renaming sequence
-        String replaceWhat = "";
-        String replaceTo = "";
+        String replaceWhat;
+        String replaceTo;
 
         while (true)
         {
@@ -129,10 +132,10 @@ public final class CommandLine
         if (yes)
         {
             System.out.println("Renaming...");
-            List<String> renamed = renameFiles(files, replaceWhat, replaceTo, false);
-            for (String s : renamed)
+            List<StringTuple> renamed = renameFiles(files, replaceWhat, replaceTo, false);
+            for (StringTuple st : renamed)
             {
-                System.out.println(s);
+                System.out.printf("Renamed %s to %s", st.getString1(), st.getString2());
             }
             System.out.println("Done!");
         }
@@ -141,7 +144,7 @@ public final class CommandLine
             System.out.println("Quitting without renaming...");
         }
 
-        // closing has to be AFTER yesNoPrompt or it messes System.in newline
+        // closing has to be AFTER yesNoPrompt, or it messes System.in newline
         sc.close();
     }
 
@@ -214,10 +217,10 @@ public final class CommandLine
                 if (dir.exists() && dir.isDirectory())
                 {
                     List<File> files = collectFilesRecursively(Paths.get(args[0]));
-                    List<String> renamedFiles = renameFiles(files, args[1], args[2], false);
-                    for (String s : renamedFiles)
+                    List<StringTuple> renamedFiles = renameFiles(files, args[1], args[2], false);
+                    for (StringTuple st : renamedFiles)
                     {
-                        System.out.println(s);
+                        System.out.printf("Renamed %s to %s", st.getString1(), st.getString2());
                     }
                 }
                 else
