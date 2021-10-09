@@ -6,10 +6,10 @@
 package com.github.otjura.renamerfx.gui;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import javafx.fxml.FXMLLoader;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -31,6 +31,8 @@ public final class FXMLGuiStarter extends Application
             stage.setTitle("RenamerFX");
             stage.getIcons().add(new Image("icon.png"));
             stage.setScene(scene);
+            stage.setMinWidth(420);
+            stage.setMinHeight(300);
             stage.show();
         }
         catch (NullPointerException | IOException e)
