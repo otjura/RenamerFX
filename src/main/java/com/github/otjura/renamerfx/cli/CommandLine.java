@@ -103,7 +103,6 @@ public final class CommandLine
 		// Renaming sequence
 		String replaceWhat;
 		String replaceTo;
-
 		while (true)
 		{
 			System.out.print("Replace what in filenames?: ");
@@ -136,7 +135,7 @@ public final class CommandLine
 			List<StringTuple> renamed = renameFiles(files, replaceWhat, replaceTo, false);
 			for (StringTuple st : renamed)
 			{
-				System.out.printf("Renamed %s to %s", st.getString1(), st.getString2());
+				System.out.println(st.toString());
 			}
 			System.out.println("Done!");
 		}
@@ -144,8 +143,6 @@ public final class CommandLine
 		{
 			System.out.println("Quitting without renaming...");
 		}
-
-		// closing has to be AFTER yesNoPrompt, or it messes System.in newline
 		sc.close();
 	}
 
@@ -225,8 +222,7 @@ public final class CommandLine
 					List<StringTuple> renamedFiles = renameFiles(files, args[1], args[2], false);
 					for (StringTuple st : renamedFiles)
 					{
-						System.out.printf("Renamed %s to %s", st.getString1(),
-							st.getString2());
+						System.out.println(st.toString());
 					}
 				}
 				else
@@ -245,6 +241,5 @@ public final class CommandLine
 			System.out.println("Supply all arguments for non-interactive batch renaming:");
 			help();
 		}
-
 	}
 }

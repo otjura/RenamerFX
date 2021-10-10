@@ -19,6 +19,8 @@ import java.util.stream.Stream;
  */
 public final class Logic
 {
+	private static final String EMPTY_STRING = "";
+
 	/**
 	 * Converts input string to canonical path.
 	 *
@@ -37,7 +39,7 @@ public final class Logic
 		{
 			e.printStackTrace();
 		}
-		return "";
+		return EMPTY_STRING;
 	}
 
 	/**
@@ -100,6 +102,7 @@ public final class Logic
 				String newname = filename.replace(replaceWhat, replaceTo);
 				String fullpath = file.getParent() + File.separator;
 				String fullnewname = fullpath + newname;
+
 				if (!filename.equals(newname))
 				{
 					if (!simulate)
@@ -107,12 +110,11 @@ public final class Logic
 						try
 						{
 							// renames files returning success/failure
-							if (!file.renameTo(new File(
-								fullnewname)))
+							if (!file.renameTo(new File(fullnewname)))
 							{
 								renamedFiles.add(new StringTuple(
 									"ERROR " + filename + " couldn't be renamed!",
-									""));
+									EMPTY_STRING));
 							}
 						}
 						catch (SecurityException e)
@@ -128,62 +130,16 @@ public final class Logic
 	}
 
 	/**
-	 * Lineated representation of ArrayList contents.
-	 *
-	 * @param arr
-	 * 	any string array
-	 *
-	 * @return lineated string representation, newline on empty input
-	 */
-	public static String pprint(List<String> arr)
-	{
-		if (arr.isEmpty())
-		{
-			return "\n";
-		}
-		StringBuilder sb = new StringBuilder(arr.size());
-		arr.forEach(s ->
-		{
-			if (s == null)
-			{
-				s = "";
-			}
-			sb.append(s);
-			sb.append("\n");
-		});
-		return sb.toString();
-	}
-
-	/**
-	 * Helper method converting file array to string array
-	 *
-	 * @param files
-	 * 	list of valid file objects
-	 *
-	 * @return names of files
-	 */
-	public static List<String> fileArrayToStringList(List<File> files)
-	{
-		List<String> arr = new ArrayList<>(files.size());
-
-		for (File f : files)
-		{
-			arr.add(f.getName());
-		}
-		return arr;
-	}
-
-	/**
-	 * Lists file names of files in a directory dir
+	 * Read in files in a directory without renaming them, then return their name in StringTuple.
 	 *
 	 * @param dir
-	 * 	path, relative or absolute
+	 * 	A directory.
 	 *
-	 * @return pretty print of files in directory, empty if no files
+	 * @return List of tuples where each is (fileName, EMPTY_STRING)
 	 */
-	public static String fileListing(String dir)
+	public static List<StringTuple> filesAsStringTuples(String dir)
 	{
-		String listing = "";
+		List<StringTuple> stringTuples = new ArrayList<>(0);
 
 		if (isValidFolder(dir))
 		{
@@ -191,15 +147,15 @@ public final class Logic
 			try
 			{
 				List<File> files = collectFilesRecursively(folder);
-				List<String> arr = fileArrayToStringList(files);
-				listing = pprint(arr);
+				files.forEach(file -> stringTuples.add(new StringTuple(file.getName(), EMPTY_STRING)));
 			}
 			catch (IOException e)
 			{
 				e.printStackTrace();
 			}
 		}
-		return listing;
+
+		return stringTuples;
 	}
 
 	/**

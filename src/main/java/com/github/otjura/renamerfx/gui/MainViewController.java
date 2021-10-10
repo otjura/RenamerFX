@@ -10,16 +10,17 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import static com.github.otjura.renamerfx.core.Logic.*;
@@ -29,11 +30,9 @@ import static com.github.otjura.renamerfx.core.Logic.*;
  */
 public final class MainViewController implements Initializable
 {
-	private static final String NO_SUCH_DIR = "Directory doesn't exist or is empty";
-	private static final String NOTHING_RENAMED = "Nothing was renamed";
 	private static final String APP_START_DIR = System.getProperty("user.dir");
 	private static final String HOME_DIR = System.getProperty("user.home");
-	private static final String[] HOME_DIR_ALIASES = { "~", "$HOME" };
+	private static final String[] HOME_DIR_ALIASES = { "~", "$HOME", "$home" };
 
 	@FXML private VBox inputArea;   // intellij says these boxes are not used,
 	@FXML private HBox buttonGroup; // but actually they are in the fxml file
@@ -45,8 +44,10 @@ public final class MainViewController implements Initializable
 	@FXML private Button previewButton;
 	@FXML private Button dirButton;
 	@FXML private GridPane grid;
-	@FXML private TextArea resultTextArea;
 	@FXML private Button setDir;
+	@FXML private TableView<StringTuple> resultTable;
+	@FXML private TableColumn<StringTuple, String> oldNameCol;
+	@FXML private TableColumn<StringTuple, String> newNameCol;
 
 	/**
 	 * Changes current directory to given path in UI directory field.
@@ -87,36 +88,36 @@ public final class MainViewController implements Initializable
 	 */
 	private void runRename(boolean simulate)
 	{
-		String dir = dirField.getText();
+		String dir = checkForHomeDirAlias(dirField.getText());
 		String what = replaceWhatField.getText();
 		String to = replaceToField.getText();
 
 		if (isValidFolder(dir))
 		{
-			var oldNewNames = renameRecursively(dir, what, to, simulate);
-			var namesAsString = new ArrayList<String>();
-			for (StringTuple st : oldNewNames)
-			{
-				namesAsString.add("Renamed " + st.getString1() + " to " + st.getString2());
-			}
-			String filesRenamed = pprint(namesAsString);
-			if (filesRenamed.isBlank())
-			{
-				resultTextArea.setText(NOTHING_RENAMED);
-			}
-			else if (simulate)
-			{
-				resultTextArea.setText(filesRenamed + "\nWould rename the files as shown.");
-			}
-			else
-			{
-				resultTextArea.setText(filesRenamed + "\nSuccessfully renamed files!");
-			}
+			List<StringTuple> oldAndNewNames = renameRecursively(dir, what, to, simulate);
+			initResultTable(oldAndNewNames);
 		}
-		else
+	}
+
+	/**
+	 * If input path is any of the aliases for home directory, returns the usable format of it. Otherwise, returns
+	 * input path untouched.
+	 *
+	 * @param path
+	 * 	Path to check.
+	 *
+	 * @return Path string.
+	 */
+	private String checkForHomeDirAlias(String path)
+	{
+		for (String s : HOME_DIR_ALIASES)
 		{
-			resultTextArea.setText(NO_SUCH_DIR);
+			if (path.equals(s))
+			{
+				return HOME_DIR;
+			}
 		}
+		return path;
 	}
 
 	/**
@@ -124,31 +125,20 @@ public final class MainViewController implements Initializable
 	 */
 	private void listDirectory()
 	{
-		String input = dirField.getText();
+		String input = checkForHomeDirAlias(dirField.getText());
+		List<StringTuple> files = filesAsStringTuples(input);
+		initResultTable(files);
+	}
 
-		for (String s : HOME_DIR_ALIASES)
+	private void initResultTable(List<StringTuple> values)
+	{
+		if (!resultTable.getItems().isEmpty())
 		{
-			if (input.equals(s))
-			{
-				input = HOME_DIR;
-				break;
-			}
+			resultTable.getItems().clear();
 		}
-
-		String files = fileListing(input);
-
-		if (files.isBlank() && !input.isBlank())
-		{
-			resultTextArea.setText(NO_SUCH_DIR);
-		}
-		else if (input.isBlank())
-		{
-			resultTextArea.setText(fileListing(System.clearProperty("user.dir")));
-		}
-		else
-		{
-			resultTextArea.setText(files);
-		}
+		resultTable.getItems().addAll(values);
+		oldNameCol.setCellValueFactory(new PropertyValueFactory<>("string1"));
+		newNameCol.setCellValueFactory(new PropertyValueFactory<>("string2"));
 	}
 
 	/**
@@ -162,17 +152,12 @@ public final class MainViewController implements Initializable
 	 */
 	public void initialize(URL location, ResourceBundle resources)
 	{
-		resultTextArea.setEditable(false);
-		resultTextArea.setPromptText("Results appear here.");
-
+		resultTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+		resultTable.setEditable(false);
 		statusText.setText(APP_START_DIR);
-
 		dirField.setPromptText("Requires folder path");
 		dirField.setText(APP_START_DIR);
 		dirField.requestFocus();
-
-		// shitty hack to work around javafx bug/feature where selected field contents are also selected
-		dirField.setFocusTraversable(false); // can't come back to this with tab, so find a better way
 
 		// Rename files, display result on result area
 		renamerButton.setOnAction(e -> runRename(false));
@@ -189,25 +174,13 @@ public final class MainViewController implements Initializable
 		// hotkeys bound on grid layer
 		grid.setOnKeyPressed(e ->
 		{
-			if (e.getCode() == KeyCode.F1)
+			switch (e.getCode())
 			{
-				listDirectory();
-			}
-			else if (e.getCode() == KeyCode.F2)
-			{
-				runRename(true);
-			}
-			else if (e.getCode() == KeyCode.F3)
-			{
-				runRename(false);
-			}
-			else if (e.getCode() == KeyCode.F4)
-			{
-				changeDirectory();
-			}
-			else if (e.getCode() == KeyCode.ESCAPE)
-			{
-				Platform.exit();
+				case F1 -> listDirectory();
+				case F2 -> runRename(true);
+				case F3 -> runRename(false);
+				case F4 -> changeDirectory();
+				case ESCAPE -> Platform.exit();
 			}
 		});
 	}

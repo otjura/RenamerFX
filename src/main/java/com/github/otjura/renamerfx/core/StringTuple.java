@@ -27,4 +27,9 @@ public class StringTuple
 		this.string2 = string2;
 	}
 
+	@Override
+	public String toString()
+	{
+		return "Renamed " + string1 + " to " + string2;
+	}
 }
