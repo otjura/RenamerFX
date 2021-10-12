@@ -1,23 +1,24 @@
 # RenamerFX
 
-Tool for batch renaming files. Recurses directory tree and does a text replace on filenames.
+Program for batch renaming files. Recurses directory tree and does a simple text replace on filenames.
 
 ## Build & Run
 
 Requirements:
 
-* Java 11
+* Java 17
 * Maven
 
 This is a Maven project not tied to any IDE. Executing `mvn clean javafx:run` in project root should suffice to run it.
-avaFX comes in Maven config.
+JavaFX comes in Maven config.
 
 `mvn package` creates a self-contained executable uberjar in ./target.
 
 ## Use
 
-Clicking uberjar or running it without arguments from command-line with `java -jar` opens the tool in graphical mode.
-Giving it arguments runs it in command-line mode, for example `java -jar RenamerFX-1.2.2-uber.jar --help`
+Clicking uberjar or running it without arguments from command-line with `java -jar` opens the program in graphical mode.
+Giving it arguments runs it in command-line mode, for example `java -jar RenamerFX-1.4.0-uber.jar --help` prints the
+following help message:
 
 ```
 USAGE
@@ -27,14 +28,12 @@ renamerfx <folder> <stringToReplace> <replacementString>
 --interactive for interactive mode
 ```
 
+## Contributing
+
+The project goal is to be the best cross-platform graphical file renamer application, capable of doing wide range of
+actions, while being obvious and beautiful to the end-user. You have an idea on how to improve this software? Implement
+it and send a pull request! Please follow the code style guidelines, which you can see from sources.
+
 ## License
 
 This software is licensed under GPLv3. For the full license text, see file LICENSE.
-
-## Contributing
-
-Use the provided IntelliJ_Allman_Style on all code work on this project and make sure your code is readable and if it's
-not readable comment it well. You have an idea on how to improve this software? Implement it and send a pull request.
-
-That said, the project goal is to be the best cross-platform graphical renamer application, capable of doing a wide
-range of actions, obvious to end-user.
