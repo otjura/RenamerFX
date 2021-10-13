@@ -15,9 +15,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.List;
@@ -34,9 +31,6 @@ public final class MainViewController implements Initializable
 	private static final String HOME_DIR = System.getProperty("user.home");
 	private static final String[] HOME_DIR_ALIASES = { "~", "$HOME", "$home" };
 
-	@FXML private VBox inputArea;   // intellij says these boxes are not used,
-	@FXML private HBox buttonGroup; // but actually they are in the fxml file
-	@FXML private Text statusText;
 	@FXML private TextField dirField;
 	@FXML private TextField replaceWhatField;
 	@FXML private TextField replaceToField;
@@ -44,38 +38,9 @@ public final class MainViewController implements Initializable
 	@FXML private Button previewButton;
 	@FXML private Button dirButton;
 	@FXML private GridPane grid;
-	@FXML private Button setDir;
 	@FXML private TableView<StringTuple> resultTable;
 	@FXML private TableColumn<StringTuple, String> oldNameCol;
 	@FXML private TableColumn<StringTuple, String> newNameCol;
-
-	/**
-	 * Changes current directory to given path in UI directory field.
-	 */
-	private void changeDirectory()
-	{
-		String newDir = dirField.getText();
-
-		boolean aliasedHomeDir = false;
-		for (String s : HOME_DIR_ALIASES)
-		{
-			if (s.equals(newDir))
-			{
-				newDir = HOME_DIR;
-				aliasedHomeDir = true;
-				break;
-			}
-		}
-		if (isValidFolder(newDir))
-		{
-			System.setProperty("user.dir", newDir);
-			if (aliasedHomeDir)
-			{
-				dirField.setText(toCanonicalPath(System.getProperty("user.dir")));
-			}
-			statusText.setText(toCanonicalPath(System.getProperty("user.dir")));
-		}
-	}
 
 	/**
 	 * Renames files in directory given on dir field of UI, replacing text according to values on replaceWhat and
@@ -154,7 +119,6 @@ public final class MainViewController implements Initializable
 	{
 		resultTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 		resultTable.setEditable(false);
-		statusText.setText(APP_START_DIR);
 		dirField.setPromptText("Requires folder path");
 		dirField.setText(APP_START_DIR);
 		dirField.requestFocus();
@@ -168,9 +132,6 @@ public final class MainViewController implements Initializable
 		// List directory content on result area
 		dirButton.setOnAction(e -> listDirectory());
 
-		// changes current directory to whatever is on dirField
-		setDir.setOnAction(e -> changeDirectory());
-
 		// hotkeys bound on grid layer
 		grid.setOnKeyPressed(e ->
 		{
@@ -179,7 +140,6 @@ public final class MainViewController implements Initializable
 				case F1 -> listDirectory();
 				case F2 -> runRename(true);
 				case F3 -> runRename(false);
-				case F4 -> changeDirectory();
 				case ESCAPE -> Platform.exit();
 			}
 		});
