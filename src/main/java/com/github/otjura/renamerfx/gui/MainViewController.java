@@ -16,7 +16,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -59,8 +63,17 @@ public final class MainViewController implements Initializable
 
 		if (isValidFolder(dir))
 		{
-			List<StringTuple> oldAndNewNames = renameRecursively(dir, what, to, simulate);
-			initResultTable(oldAndNewNames);
+			Path path = Paths.get(dir);
+			try
+			{
+				List<File> files = collectFiles(path, true);
+				List<StringTuple> oldAndNewNames = renameFiles(files, what, to, simulate);
+				initResultTable(oldAndNewNames);
+			}
+			catch (IOException e)
+			{
+				dirField.setText("ERROR READING FILES IN " + dir);
+			}
 		}
 	}
 
@@ -86,13 +99,26 @@ public final class MainViewController implements Initializable
 	}
 
 	/**
-	 * Lists given directory contents on text area
+	 * Lists given directory contents on the result table.
 	 */
 	private void listDirectory()
 	{
-		String input = checkForHomeDirAlias(dirField.getText());
-		List<StringTuple> files = filesAsStringTuples(input);
-		initResultTable(files);
+		String dir = dirField.getText();
+		Path path = Path.of(checkForHomeDirAlias(dir));
+		if (isValidFolder(dir))
+		{
+			try
+			{
+				List<File> files = collectFiles(path, true);
+				List<StringTuple> fileNames = filesAsStringTuples(files);
+				initResultTable(fileNames);
+			}
+			catch (IOException e)
+			{
+				dirField.setText("ERROR LISTING FILES IN " + dir);
+			}
+		}
+
 	}
 
 	private void initResultTable(List<StringTuple> values)

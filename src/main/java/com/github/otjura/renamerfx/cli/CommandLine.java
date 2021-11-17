@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
-import static com.github.otjura.renamerfx.core.Logic.collectFilesRecursively;
+import static com.github.otjura.renamerfx.core.Logic.collectFiles;
 import static com.github.otjura.renamerfx.core.Logic.renameFiles;
 
 /**
@@ -93,7 +93,7 @@ public final class CommandLine
 		List<File> files = new ArrayList<>();
 		try
 		{
-			files = collectFilesRecursively(Paths.get(folderPath));
+			files = collectFiles(Paths.get(folderPath), true);
 		}
 		catch (IOException e)
 		{
@@ -218,7 +218,7 @@ public final class CommandLine
 				File dir = new File(args[0]);
 				if (dir.exists() && dir.isDirectory())
 				{
-					List<File> files = collectFilesRecursively(Paths.get(args[0]));
+					List<File> files = collectFiles(Paths.get(args[0]), true);
 					List<StringTuple> renamedFiles = renameFiles(files, args[1], args[2], false);
 					for (StringTuple st : renamedFiles)
 					{

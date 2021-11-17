@@ -9,10 +9,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Common static methods for both GUI and command-line.
@@ -22,55 +22,37 @@ public final class Logic
 	private static final String EMPTY_STRING = "";
 
 	/**
-	 * Converts input string to canonical path.
+	 * Traverses a given file tree, returning array of File objects upon success. Traversing recursively is an
+	 * option.
 	 *
-	 * @param path
-	 * 	string representation
+	 * @param dir
+	 * 	Path, assumes it's an existing valid directory.
+	 * @param recurse
+	 * 	TRUE to recurse the directory tree down to root, FALSE to do only dir
 	 *
-	 * @return canonical path on success, empty string on exception
-	 */
-	public static String toCanonicalPath(String path)
-	{
-		try
-		{
-			return new File(path).getCanonicalPath();
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		return EMPTY_STRING;
-	}
-
-	/**
-	 * Recurses a given file tree, returning array of File objects upon success.
-	 *
-	 * @param startDirectory
-	 * 	Path, assumes it's an existing valid directory
-	 *
-	 * @return File[] of indefinite length >= 1
+	 * @return List of File objects
 	 *
 	 * @throws IOException
 	 * 	in case something goes wrong reading files
 	 */
-	public static List<File> collectFilesRecursively(Path startDirectory) throws IOException
+	public static List<File> collectFiles(Path dir, boolean recurse) throws IOException
 	{
-		Stream<Path> fileStream = Files.walk(startDirectory);
-		List<File> files = new ArrayList<>();
-
-		// if try-catching below stream operation, the following nag happens:
-		// "Local variable files defined in an enclosing scope must be final or effectively final"
-		// ^^throwing simplifies code a lot here
-		fileStream.forEach(o ->
+		Predicate<Path> isFile = (p -> p.toFile().isFile());
+		List<File> files;
+		if (recurse)
 		{
-			File file = o.toFile();
-			if (file.isFile())
-			{
-				files.add(file);
-			}
-		});
-		fileStream.close();
-
+			files = Files.walk(dir, Integer.MAX_VALUE)
+				.filter(isFile)
+				.map(Path::toFile)
+				.collect(Collectors.toList());
+		}
+		else
+		{
+			files = Files.walk(dir, 0)
+				.filter(isFile)
+				.map(Path::toFile)
+				.collect(Collectors.toList());
+		}
 		return files;
 	}
 
@@ -102,7 +84,7 @@ public final class Logic
 				String newname = filename.replace(replaceWhat, replaceTo);
 				String fullpath = file.getParent() + File.separator;
 				String fullnewname = fullpath + newname;
-
+				// Only collect actually renamed files
 				if (!filename.equals(newname))
 				{
 					if (!simulate)
@@ -117,8 +99,7 @@ public final class Logic
 									EMPTY_STRING));
 							}
 						}
-						catch (SecurityException e)
-						{
+						catch (SecurityException e) {
 							e.printStackTrace();
 						}
 					}
@@ -132,65 +113,16 @@ public final class Logic
 	/**
 	 * Read in files in a directory without renaming them, then return their name in StringTuple.
 	 *
-	 * @param dir
-	 * 	A directory.
+	 * @param files
+	 * 	List of File objects.
 	 *
 	 * @return List of tuples where each is (fileName, EMPTY_STRING)
 	 */
-	public static List<StringTuple> filesAsStringTuples(String dir)
+	public static List<StringTuple> filesAsStringTuples(List<File> files)
 	{
 		List<StringTuple> stringTuples = new ArrayList<>(0);
-
-		if (isValidFolder(dir))
-		{
-			Path folder = Paths.get(dir);
-			try
-			{
-				List<File> files = collectFilesRecursively(folder);
-				files.forEach(file -> stringTuples.add(new StringTuple(file.getName(), EMPTY_STRING)));
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
-		}
-
+		files.forEach(file -> stringTuples.add(new StringTuple(file.getName(), EMPTY_STRING)));
 		return stringTuples;
-	}
-
-	/**
-	 * Recursive renamer. Takes string input on all args. Operates silently.
-	 *
-	 * @param dir
-	 * 	path relative or absolute
-	 * @param replaceWhat
-	 * 	string to be replaced
-	 * @param replaceTo
-	 * 	string to replace replaceWhat to
-	 * @param simulate
-	 * 	true to skip renaming
-	 *
-	 * @return succeeded renames as a list of string tuples where [oldname, newname]
-	 */
-	public static List<StringTuple> renameRecursively(String dir, String replaceWhat, String replaceTo,
-		boolean simulate)
-	{
-		List<StringTuple> renamed = new ArrayList<>();
-
-		if (!replaceWhat.isEmpty())
-		{
-			try
-			{
-				Path dirPath = Paths.get(dir);
-				List<File> files = collectFilesRecursively(dirPath);
-				renamed = renameFiles(files, replaceWhat, replaceTo, simulate);
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
-		}
-		return renamed;
 	}
 
 	/**
