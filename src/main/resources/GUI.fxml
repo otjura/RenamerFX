@@ -6,34 +6,34 @@ Copyright Otso Rajala <ojrajala@gmail.com>, 2020
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<GridPane fx:id="grid" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.2"
+<GridPane xmlns:fx="http://javafx.com/fxml/1" fx:id="grid" xmlns="http://javafx.com/javafx/11.0.2"
           fx:controller="com.github.otjura.renamerfx.gui.MainViewController">
-    <VBox fx:id="inputArea" GridPane.columnSpan="2" GridPane.rowIndex="0">
-        <HBox>
-            <Label text="Directory"/>
-            <TextField fx:id="dirField"/>
-        </HBox>
-        <HBox>
-            <Label text="Replace what?"/>
-            <TextField fx:id="replaceWhatField"/>
-        </HBox>
-        <HBox>
-            <Label text="Replace to?"/>
-            <TextField fx:id="replaceToField"/>
-        </HBox>
-    </VBox>
-    <HBox fx:id="buttonGroup" GridPane.columnSpan="2" GridPane.rowIndex="1">
-        <Button fx:id="dirButton" text="[F1]Directory contents"/>
-        <Button fx:id="previewButton" text="[F2]Preview"/>
-        <Button fx:id="renamerButton" text="[F3]Replace"/>
-        <CheckBox fx:id="recursionCheckBox" text="Recurse Directory"/>
+  <VBox fx:id="inputContainer" GridPane.rowIndex="0">
+    <HBox>
+      <Label text="Directory"/>
+      <TextField fx:id="dirField"/>
     </HBox>
-    <VBox GridPane.columnSpan="2" GridPane.rowIndex="2">
-        <TableView fx:id="resultTable">
-            <columns>
-                <TableColumn fx:id="oldNameCol" text="File Name"/>
-                <TableColumn fx:id="newNameCol" text="New Name"/>
-            </columns>
-        </TableView>
-    </VBox>
+    <HBox>
+      <Label text="Replace what?"/>
+      <TextField fx:id="replaceWhatField"/>
+    </HBox>
+    <HBox>
+      <Label text="Replace to?"/>
+      <TextField fx:id="replaceToField"/>
+    </HBox>
+  </VBox>
+  <HBox fx:id="buttonContainer" GridPane.rowIndex="1">
+    <Button fx:id="dirButton" text="[F1]Directory contents"/>
+    <Button fx:id="previewButton" text="[F2]Preview"/>
+    <Button fx:id="renamerButton" text="[F3]Replace"/>
+    <CheckBox fx:id="recursionCheckBox" text="Recurse Directory"/>
+  </HBox>
+  <VBox fx:id="resultContainer" GridPane.rowIndex="2" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+    <TableView fx:id="resultTable" VBox.vgrow="ALWAYS">
+      <columns>
+        <TableColumn fx:id="oldNameCol" text="File Name"/>
+        <TableColumn fx:id="newNameCol" text="New Name"/>
+      </columns>
+    </TableView>
+  </VBox>
 </GridPane>

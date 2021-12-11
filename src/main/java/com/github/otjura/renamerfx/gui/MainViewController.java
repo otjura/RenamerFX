@@ -70,7 +70,7 @@ private void runRename(boolean simulate) {
 		try {
 			List<File> files = collectFiles(path, recursionCheckBox.isSelected());
 			List<StringTuple> oldAndNewNames = renameFiles(files, what, to, simulate);
-			initResultTable(oldAndNewNames);
+			populateResultTable(oldAndNewNames);
 		} catch (IOException e) {
 			dirField.setText("ERROR READING FILES IN " + dir);
 		}
@@ -103,14 +103,19 @@ private void listDirectory() {
 		try {
 			List<File> files = collectFiles(path, recursionCheckBox.isSelected());
 			List<StringTuple> fileNames = filesAsStringTuples(files);
-			initResultTable(fileNames);
+			populateResultTable(fileNames);
 		} catch (IOException e) {
 			dirField.setText("ERROR LISTING FILES IN " + dir);
 		}
 	}
 }
 
-private void initResultTable(List<StringTuple> values) {
+/**
+ * Populates the result table with old names in one column and the correspondin new names in the other.
+ *
+ * @param values List of StringTuples of Old;New format.
+ */
+private void populateResultTable(List<StringTuple> values) {
 	ObservableList<StringTuple> results = resultTable.getItems();
 	if (!results.isEmpty()) {
 		results.clear();

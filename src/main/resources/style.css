@@ -9,25 +9,24 @@
   -fx-padding: 25;
 }
 
-#inputArea {
+#inputContainer {
   -fx-spacing: 8;
 }
 
-#inputArea .label {
+#inputContainer .label {
   -fx-min-width: 90;
 }
 
-#inputArea .text-field {
-  -fx-pref-width: 400px;
+#inputContainer .text-field {
+  -fx-pref-width: 400;
 }
 
-#buttonGroup {
-  -fx-alignment: center;
+#buttonContainer {
+  -fx-alignment: center-left;
   -fx-spacing: 10;
 }
 
-#buttonGroup .button {
+#buttonContainer .button {
   -fx-cursor: hand;
   -fx-spacing: 5;
 }
-
