@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Common static methods for both GUI and command-line.
@@ -30,15 +31,15 @@ private static final String EMPTY_STRING = "";
  */
 public static List<File> collectFiles(Path dir, boolean recurse) throws IOException {
 	Predicate<Path> isFile = (p -> p.toFile().isFile());
+	int depth;
 	List<File> files;
 	if (recurse) {
-		files = Files.walk(dir, Integer.MAX_VALUE)
-			.filter(isFile)
-			.map(Path::toFile)
-			.collect(Collectors.toList());
+		depth = Integer.MAX_VALUE;
 	} else {
-		files = Files.walk(dir, 1)
-			.filter(isFile)
+		depth = 1;
+	}
+	try (Stream<Path> paths = Files.walk(dir, depth)) {
+		files = paths.filter(isFile)
 			.map(Path::toFile)
 			.collect(Collectors.toList());
 	}
