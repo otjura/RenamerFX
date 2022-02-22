@@ -8,15 +8,18 @@ package com.github.otjura.renamerfx.cli;
 import com.github.otjura.renamerfx.core.StringTuple;
 
 import java.io.File;
+import java.io.IOError;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
 import static com.github.otjura.renamerfx.core.FileHandling.collectFiles;
-import static com.github.otjura.renamerfx.core.FileHandling.renameFiles;
+import static com.github.otjura.renamerfx.core.FileHandling.renamePaths;
 
 /**
  * Exclusively command-line portion of the application.
@@ -81,8 +84,8 @@ public final class CommandLine {
 			break;
 		}
 
-		// Collect files recursively into array
-		List<File> files = new ArrayList<>();
+		// Collect files recursively into list
+		List<Path> files = new LinkedList<>();
 		try {
 			files = collectFiles(Paths.get(folderPath), true);
 		} catch (IOException e) {
@@ -117,7 +120,7 @@ public final class CommandLine {
 		// Commence renaming operation
 		if (yes) {
 			System.out.println("Renaming...");
-			List<StringTuple> renamed = renameFiles(files, replaceWhat, replaceTo, false);
+			List<StringTuple> renamed = renamePaths(files, replaceWhat, replaceTo, false);
 			for (StringTuple st : renamed) {
 				System.out.println(st.toString());
 			}
@@ -131,15 +134,15 @@ public final class CommandLine {
 	/**
 	 * Prints type and full path filename of File objects in a provided File[] parameter. Printout is one entry per row.
 	 *
-	 * @param files list of length > 0
+	 * @param paths list of length > 0
 	 */
-	private static void fileLister(List<File> files) {
-		for (File file : files) {
-			String type = file.isFile() ? "FILE" : "DIRECTORY";
+	private static void fileLister(List<Path> paths) {
+		for (Path path : paths) {
+			String type = Files.isDirectory(path) ? "DIRECTORY" : "FILE";
 			try {
-				System.out.println(type + ": " + file.getCanonicalPath());
-			} catch (IOException e) {
-				e.printStackTrace();
+				System.out.println(type + ": " + path.toAbsolutePath());
+			} catch (IOError e) {
+				System.out.println("Can't access file.");
 			}
 		}
 	}
@@ -180,8 +183,8 @@ public final class CommandLine {
 			try {
 				File dir = new File(args[0]);
 				if (dir.exists() && dir.isDirectory()) {
-					List<File> files = collectFiles(Paths.get(args[0]), true);
-					List<StringTuple> renamedFiles = renameFiles(files, args[1], args[2], false);
+					List<Path> files = collectFiles(Paths.get(args[0]), true);
+					List<StringTuple> renamedFiles = renamePaths(files, args[1], args[2], false);
 					for (StringTuple st : renamedFiles) {
 						System.out.println(st.toString());
 					}

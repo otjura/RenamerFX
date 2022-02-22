@@ -10,11 +10,14 @@ import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -22,7 +25,10 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.github.otjura.renamerfx.core.FileHandling.*;
+import static com.github.otjura.renamerfx.core.FileHandling.collectFiles;
+import static com.github.otjura.renamerfx.core.FileHandling.isValidFolder;
+import static com.github.otjura.renamerfx.core.FileHandling.pathsAsStringTuples;
+import static com.github.otjura.renamerfx.core.FileHandling.renamePaths;
 
 /**
  * Methods and fields for GUI.fxml view. Has to be public or FXML fails to load with javafx.fxml.LoadException
@@ -69,8 +75,8 @@ public final class MainViewController implements Initializable {
 		if (isValidFolder(dir)) {
 			Path path = Paths.get(dir);
 			try {
-				List<File> files = collectFiles(path, recursionCheckBox.isSelected());
-				List<StringTuple> oldAndNewNames = renameFiles(files, what, to, simulate);
+				List<Path> files = collectFiles(path, recursionCheckBox.isSelected());
+				List<StringTuple> oldAndNewNames = renamePaths(files, what, to, simulate);
 				populateResultTable(oldAndNewNames);
 			} catch (IOException e) {
 				dirField.setText("ERROR READING FILES IN " + dir);
@@ -102,8 +108,8 @@ public final class MainViewController implements Initializable {
 		if (isValidFolder(dir)) {
 			Path path = Path.of(checkForHomeDirAlias(dir));
 			try {
-				List<File> files = collectFiles(path, recursionCheckBox.isSelected());
-				List<StringTuple> fileNames = filesAsStringTuples(files);
+				List<Path> files = collectFiles(path, recursionCheckBox.isSelected());
+				List<StringTuple> fileNames = pathsAsStringTuples(files);
 				populateResultTable(fileNames);
 			} catch (IOException e) {
 				dirField.setText("ERROR LISTING FILES IN " + dir);
