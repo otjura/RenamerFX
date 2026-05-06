@@ -6,7 +6,7 @@ Program for batch renaming files. Recurses directory tree and does a simple text
 
 Requirements:
 
-* Java 17
+* Java 25
 * Maven
 
 This is a Maven project not tied to any IDE. Executing `mvn clean javafx:run` in project root should suffice to run it.
