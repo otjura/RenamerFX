@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
@@ -35,9 +35,8 @@ public final class CommandLine {
 	 * @return boolean, TRUE on "y" or "yes", FALSE otherwise
 	 */
 	private static boolean yesNoPrompt() {
-		Scanner sc = new Scanner(System.in);
-		String ans = sc.nextLine().toLowerCase();
-		sc.close();
+		var sc = new Scanner(System.in);
+		var ans = sc.nextLine().toLowerCase();
 		return ans.equals("y") || ans.equals("yes");
 	}
 
@@ -46,8 +45,8 @@ public final class CommandLine {
 	 */
 	private static void interactiveRenaming() {
 		System.out.println("Hello! Welcome to RenamerFX interactive renaming!");
-		Scanner sc = new Scanner(System.in);
-		String cwd = new File(".").getAbsolutePath();
+		var sc = new Scanner(System.in);
+		var cwd = new File(".").getAbsolutePath();
 		System.out.println("Current directory: " + cwd);
 		String folderPath;
 
@@ -62,7 +61,7 @@ public final class CommandLine {
 				continue;
 			}
 
-			File folder = new File(folderPath);
+			var folder = new File(folderPath);
 
 			if (folder.isFile()) {
 				System.out.println("Need a directory.");
@@ -74,7 +73,7 @@ public final class CommandLine {
 				continue;
 			}
 
-			int numberOfItems = Objects.requireNonNull(folder.listFiles()).length; // NOTE: lists both files and directories
+			var numberOfItems = Objects.requireNonNull(folder.listFiles()).length; // NOTE: lists both files and directories
 
 			if (numberOfItems == 0) {
 				System.out.println("Folder is empty.");
@@ -85,7 +84,7 @@ public final class CommandLine {
 		}
 
 		// Collect files recursively into list
-		List<Path> files = new LinkedList<>();
+		List<Path> files = new ArrayList<>();
 		try {
 			files = collectFiles(Paths.get(folderPath), true);
 		} catch (IOException e) {
@@ -115,20 +114,19 @@ public final class CommandLine {
 		// Verify acquired files are correct
 		fileLister(files);
 		System.out.print("Rename in these files? (y/n) ");
-		boolean yes = yesNoPrompt();
+		var yes = yesNoPrompt();
 
 		// Commence renaming operation
 		if (yes) {
 			System.out.println("Renaming...");
-			List<StringTuple> renamed = renamePaths(files, replaceWhat, replaceTo, false);
-			for (StringTuple st : renamed) {
+			var renamed = renamePaths(files, replaceWhat, replaceTo, false);
+			for (var st : renamed) {
 				System.out.println(st.toString());
 			}
 			System.out.println("Done!");
 		} else {
 			System.out.println("Quitting without renaming...");
 		}
-		sc.close();
 	}
 
 	/**
@@ -137,8 +135,8 @@ public final class CommandLine {
 	 * @param paths list of length > 0
 	 */
 	private static void fileLister(List<Path> paths) {
-		for (Path path : paths) {
-			String type = Files.isDirectory(path) ? "DIRECTORY" : "FILE";
+		for (var path : paths) {
+			var type = Files.isDirectory(path) ? "DIRECTORY" : "FILE";
 			try {
 				System.out.println(type + ": " + path.toAbsolutePath());
 			} catch (IOError e) {
@@ -181,11 +179,11 @@ public final class CommandLine {
 		// args[directory, replaceWhat, replaceTo]
 		else if (args.length == 3) {
 			try {
-				File dir = new File(args[0]);
+				var dir = new File(args[0]);
 				if (dir.exists() && dir.isDirectory()) {
-					List<Path> files = collectFiles(Paths.get(args[0]), true);
-					List<StringTuple> renamedFiles = renamePaths(files, args[1], args[2], false);
-					for (StringTuple st : renamedFiles) {
+					var files = collectFiles(Paths.get(args[0]), true);
+					var renamedFiles = renamePaths(files, args[1], args[2], false);
+					for (var st : renamedFiles) {
 						System.out.println(st.toString());
 					}
 				} else {

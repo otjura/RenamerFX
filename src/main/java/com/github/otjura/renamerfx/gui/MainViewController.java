@@ -69,14 +69,14 @@ public final class MainViewController implements Initializable {
 	 * @param simulate TRUE to skip renaming and only display would-be results, FALSE to run rename and display results
 	 */
 	private void runRename(boolean simulate) {
-		String dir = checkForHomeDirAlias(dirField.getText());
-		String what = replaceWhatField.getText();
-		String to = replaceToField.getText();
+		var dir = checkForHomeDirAlias(dirField.getText());
+		var what = replaceWhatField.getText();
+		var to = replaceToField.getText();
 		if (isValidFolder(dir)) {
-			Path path = Paths.get(dir);
+			var path = Paths.get(dir);
 			try {
-				List<Path> files = collectFiles(path, recursionCheckBox.isSelected());
-				List<StringTuple> oldAndNewNames = renamePaths(files, what, to, simulate);
+				var files = collectFiles(path, recursionCheckBox.isSelected());
+				var oldAndNewNames = renamePaths(files, what, to, simulate);
 				populateResultTable(oldAndNewNames);
 			} catch (IOException e) {
 				dirField.setText("ERROR READING FILES IN " + dir);
@@ -92,7 +92,7 @@ public final class MainViewController implements Initializable {
 	 * @return Path string.
 	 */
 	private String checkForHomeDirAlias(String path) {
-		for (String s : HOME_DIR_ALIASES) {
+		for (var s : HOME_DIR_ALIASES) {
 			if (path.equals(s)) {
 				return HOME_DIR;
 			}
@@ -104,12 +104,12 @@ public final class MainViewController implements Initializable {
 	 * Lists given directory contents on the result table.
 	 */
 	private void listDirectory() {
-		String dir = dirField.getText();
+		var dir = dirField.getText();
 		if (isValidFolder(dir)) {
-			Path path = Path.of(checkForHomeDirAlias(dir));
+			var path = Path.of(checkForHomeDirAlias(dir));
 			try {
-				List<Path> files = collectFiles(path, recursionCheckBox.isSelected());
-				List<StringTuple> fileNames = pathsAsStringTuples(files);
+				var files = collectFiles(path, recursionCheckBox.isSelected());
+				var fileNames = pathsAsStringTuples(files);
 				populateResultTable(fileNames);
 			} catch (IOException e) {
 				dirField.setText("ERROR LISTING FILES IN " + dir);

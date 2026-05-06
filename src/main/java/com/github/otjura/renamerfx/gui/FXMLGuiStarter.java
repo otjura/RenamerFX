@@ -31,7 +31,8 @@ public final class FXMLGuiStarter extends Application {
 	@Override
 	public void start(Stage stage) {
 		try {
-			Scene scene = new Scene(FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("GUI.fxml"))));
+			var fxmlLoader = new FXMLLoader(Objects.requireNonNull(getClass().getClassLoader().getResource("GUI.fxml")));
+			var scene = new Scene(fxmlLoader.load());
 			scene.getStylesheets().add("style.css");
 
 			stage.setTitle("RenamerFX");

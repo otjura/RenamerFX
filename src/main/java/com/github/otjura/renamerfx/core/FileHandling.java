@@ -10,11 +10,9 @@ import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Common static methods for handling files for both GUI and command-line.
@@ -32,13 +30,11 @@ public final class FileHandling {
 	 * @throws IOException in case something goes wrong reading files
 	 */
 	public static List<Path> collectFiles(Path dir, boolean recurse) throws IOException {
-		Predicate<Path> isFile = (Files::isRegularFile);
+		Predicate<Path> isFile = Files::isRegularFile;
 		int depth = recurse ? Integer.MAX_VALUE : 1; // depth 1 means current directory only
-		List<Path> files;
-		try (Stream<Path> paths = Files.walk(dir, depth)) {
-			files = paths.filter(isFile).collect(Collectors.toList());
+		try (var paths = Files.walk(dir, depth)) {
+			return paths.filter(isFile).toList();
 		}
-		return files;
 	}
 
 	/**
@@ -52,10 +48,10 @@ public final class FileHandling {
 	 * @return List of renames in {oldName,newName} format, or {oldName,ERROR} in case of error.
 	 */
 	public static List<StringTuple> renamePaths(List<Path> paths, String replaceWhat, String replaceTo, boolean simulate) {
-		List<StringTuple> renamed = new LinkedList<>();
-		for (Path path : paths) {
-			String filename = path.getFileName().toString();
-			String newname = filename.replace(replaceWhat, replaceTo);
+		var renamed = new ArrayList<StringTuple>();
+		for (var path : paths) {
+			var filename = path.getFileName().toString();
+			var newname = filename.replace(replaceWhat, replaceTo);
 			// skip renaming and collecting if newName would be the same
 			if (!filename.equals(newname)) {
 				if (!simulate) {
@@ -78,9 +74,9 @@ public final class FileHandling {
 	 * @return List of tuples where each is {fileName, EMPTY_STRING}
 	 */
 	public static List<StringTuple> pathsAsStringTuples(List<Path> paths) {
-		List<StringTuple> stringTuples = new LinkedList<>();
-		paths.forEach(file -> stringTuples.add(new StringTuple(file.getFileName().toString(), EMPTY_STRING)));
-		return stringTuples;
+		return paths.stream()
+				.map(file -> new StringTuple(file.getFileName().toString(), EMPTY_STRING))
+				.toList();
 	}
 
 	/**
