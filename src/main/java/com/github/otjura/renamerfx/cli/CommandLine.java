@@ -5,8 +5,6 @@
 
 package com.github.otjura.renamerfx.cli;
 
-import com.github.otjura.renamerfx.core.StringTuple;
-
 import java.io.File;
 import java.io.IOError;
 import java.io.IOException;
@@ -37,6 +35,7 @@ public final class CommandLine {
 	private static boolean yesNoPrompt() {
 		var sc = new Scanner(System.in);
 		var ans = sc.nextLine().toLowerCase();
+		sc.close();
 		return ans.equals("y") || ans.equals("yes");
 	}
 
@@ -110,6 +109,7 @@ public final class CommandLine {
 			}
 			break;
 		}
+		sc.close();
 
 		// Verify acquired files are correct
 		fileLister(files);

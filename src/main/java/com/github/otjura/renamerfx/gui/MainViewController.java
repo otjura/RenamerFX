@@ -140,7 +140,7 @@ public final class MainViewController implements Initializable {
 	 * @param resources Locale-specific objects.
 	 */
 	public void initialize(URL location, ResourceBundle resources) {
-		resultTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+		resultTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
 		resultTable.setEditable(false);
 		dirField.setPromptText("Requires folder path");
 		dirField.setText(APP_START_DIR);
@@ -157,6 +157,7 @@ public final class MainViewController implements Initializable {
 				case F2 -> runRename(true);
 				case F3 -> runRename(false);
 				case ESCAPE -> Platform.exit();
+				default -> {}
 			}
 		});
 	}
